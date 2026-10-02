@@ -88,6 +88,9 @@ tmp/
 # ---- Never commit patient or partner data ----
 *.csv
 *.xlsx
-!docs/**/*.csv
 data/exports/
 uploads/
+
+# ---- Local-only business docs (blueprint, budgets, strategy) ----
+/docs/
+PROMPTS.md
