@@ -1,0 +1,37 @@
+{
+  "app": {
+    "name": "TBD",
+    "tagline": "Alamin kung saan pupunta, magkano ang babayaran, at anong tulong ang maaari mong makuha."
+  },
+  "home": {
+    "bookInApp": "Sa app ginagawa ang pag-book.",
+    "signIn": "Mag-sign in ang staff at partner"
+  },
+  "login": {
+    "title": "Mag-sign in",
+    "subtitle": "Para sa aming team, mga doktor at mga partner na pasilidad.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Mag-sign in",
+    "submitting": "Nagsa-sign in…",
+    "errors": {
+      "invalid": "Mali ang email o password.",
+      "noAccess": "Walang access sa web console ang account na ito."
+    }
+  },
+  "console": {
+    "signOut": "Mag-sign out",
+    "admin": {
+      "title": "Admin console",
+      "placeholder": "Dito lalabas ang beripikasyon, datos at mga role."
+    },
+    "doctor": {
+      "title": "Dashboard ng doktor",
+      "placeholder": "Dito lalabas ang iyong kalendaryo at mga appointment."
+    },
+    "provider": {
+      "title": "Portal ng provider",
+      "placeholder": "Dito lalabas ang iyong mga serbisyo, iskedyul at booking."
+    }
+  }
+}

@@ -1,0 +1,93 @@
+# ---- Local AI assistant config (kept out of the repo) ----
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+.cursor/
+.aider*
+
+# ---- Secrets and environment ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.mobileprovision
+google-services.json
+GoogleService-Info.plist
+service-account*.json
+
+# ---- Node / Next.js (web/) ----
+node_modules/
+.pnp
+.pnp.js
+.next/
+out/
+build/
+dist/
+.turbo/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# ---- Supabase ----
+.supabase/
+supabase/.branches/
+supabase/.temp/
+
+# ---- Android (android/) ----
+*.iml
+.gradle/
+local.properties
+android/.idea/
+android/build/
+android/app/build/
+android/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.keystore
+*.jks
+release/
+
+# ---- iOS (ios/) ----
+ios/build/
+DerivedData/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+Pods/
+*.ipa
+*.dSYM.zip
+fastlane/report.xml
+fastlane/screenshots/
+
+# ---- OS and editor ----
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+!.vscode/extensions.json
+
+# ---- Logs and temp ----
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+tmp/
+.cache/
+
+# ---- Never commit patient or partner data ----
+*.csv
+*.xlsx
+!docs/**/*.csv
+data/exports/
+uploads/

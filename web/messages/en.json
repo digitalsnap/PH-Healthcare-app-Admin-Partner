@@ -1,0 +1,37 @@
+{
+  "app": {
+    "name": "TBD",
+    "tagline": "Know where to go, what you'll pay, and what help you can get."
+  },
+  "home": {
+    "bookInApp": "Booking happens in the app.",
+    "signIn": "Staff and partner sign in"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "For the internal team, doctors and partner facilities.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "errors": {
+      "invalid": "The email or password is not correct.",
+      "noAccess": "This account has no access to the web console."
+    }
+  },
+  "console": {
+    "signOut": "Sign out",
+    "admin": {
+      "title": "Admin console",
+      "placeholder": "Verification, data and roles will appear here."
+    },
+    "doctor": {
+      "title": "Doctor dashboard",
+      "placeholder": "Your calendar and appointments will appear here."
+    },
+    "provider": {
+      "title": "Provider portal",
+      "placeholder": "Your services, schedule and bookings will appear here."
+    }
+  }
+}
