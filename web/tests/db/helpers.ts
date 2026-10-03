@@ -161,3 +161,19 @@ export async function createSlot(client: Client, scheduleId: string, capacity: n
 
 export const BOOK_SLOT_SQL =
   "select (public.book_slot($1, $2, $3, 'assisted_counter', $4)).id as appointment_id";
+
+/**
+ * Runs `work` as a signed-in API user: the `authenticated` role with the
+ * user's id in the JWT claim, which is what row-level security sees in
+ * Supabase. Always rolled back, so it never leaves data behind.
+ */
+export async function asUser<T>(client: Client, userId: string, work: () => Promise<T>): Promise<T> {
+  await client.query("begin");
+  try {
+    await client.query("select set_config('request.jwt.claim.sub', $1, true)", [userId]);
+    await client.query("set local role authenticated");
+    return await work();
+  } finally {
+    await client.query("rollback");
+  }
+}

@@ -18,6 +18,20 @@ Read `../CLAUDE.md` before changing anything.
 | `messages/` | i18n strings (`en`, `fil`) — never hardcode user-facing text |
 | `../supabase/migrations/` | The schema, as numbered SQL files |
 
+## Admin console
+
+`/admin` is the data-freshness dashboard. Under it: `facilities` (with prices,
+accreditations and verification on each facility's page), `practitioners` (PRC
+verification), `services`, `coverage`, and — for the `admin` role only —
+`users` and `access-log`.
+
+- Pages read through the signed-in user's Supabase client, so row-level
+  security applies. Lists are server-rendered and paginated.
+- Every mutation is a server action in `src/lib/admin/actions/`, validated by
+  `src/lib/admin/schemas.ts`, and writes an `access_log` row.
+- Facilities need `location` rows (PSGC) to exist first; there is no location
+  import screen yet.
+
 ## Commands
 
 ```bash

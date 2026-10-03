@@ -29,7 +29,8 @@ dist/
 .vercel/
 *.tsbuildinfo
 next-env.d.ts
-coverage/
+# Test-coverage output only. Anchored so it does not swallow source folders
+# named "coverage" (web/src/lib/coverage, the /admin/coverage routes).
 .nyc_output/
 playwright-report/
 test-results/

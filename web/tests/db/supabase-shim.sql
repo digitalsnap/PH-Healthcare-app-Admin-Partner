@@ -24,14 +24,22 @@ create table auth.users (
   id uuid primary key default gen_random_uuid()
 );
 
--- Supabase reads the user id from the request's JWT; tests set it directly.
+-- Supabase reads the user id from the request's JWT. Tests set the legacy
+-- per-claim setting directly; PostgREST sets the JSON claims object.
 create function auth.uid()
 returns uuid
 language sql
 stable
 as $$
-  select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid;
+  select coalesce(
+    nullif(current_setting('request.jwt.claim.sub', true), ''),
+    nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub'
+  )::uuid;
 $$;
+
+-- Supabase ships an `extensions` schema the API roles can use.
+create schema if not exists extensions;
+grant usage on schema extensions to anon, authenticated, service_role;
 
 grant usage on schema auth to anon, authenticated, service_role;
 grant usage on schema public to anon, authenticated, service_role;
