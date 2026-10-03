@@ -35,6 +35,7 @@ export type LocationOption = { psgc_code: string; name: string };
 
 export type PractitionerRow = {
   id: string;
+  app_user_id: string | null;
   full_name: string;
   prc_number: string | null;
   prc_licence_expires_on: string | null;

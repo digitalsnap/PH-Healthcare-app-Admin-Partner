@@ -89,7 +89,20 @@
       "datesOrder": "The end date cannot be before the start date.",
       "duplicate": "This already exists.",
       "cannotChangeOwnAccount": "You cannot change your own role or access.",
-      "inviteFailed": "The invitation could not be sent."
+      "inviteFailed": "The invitation could not be sent.",
+      "timesOrder": "The end time must be after the start time.",
+      "invalidSlotLength": "The slot length must fit inside the session (5 to 720 minutes).",
+      "notAffiliated": "Add this clinic to your profile first.",
+      "affiliationInUse": "This clinic has a schedule. Remove its sessions before removing the clinic.",
+      "slotFull": "That slot is already full.",
+      "slotUnavailable": "That slot is no longer available.",
+      "consentRequired": "Confirm the patient's consent before booking.",
+      "patientRequired": "Choose a returning patient or enter the patient's name.",
+      "transitionNotAllowed": "This appointment can no longer be changed that way.",
+      "noShowTooEarly": "A no-show can only be marked once the appointment time has started.",
+      "rescheduleNotAllowed": "Only a booked appointment can move, and only to a future slot.",
+      "reasonRequired": "Choose a reason for cancelling.",
+      "verificationRequested": "You cannot publish until your PRC verification is recorded. Our team has been notified of your request."
     },
     "freshness": {
       "lastVerified": "Last verified {date}",
@@ -165,7 +178,13 @@
       "workQueue": "Verify next",
       "workQueueEmpty": "No facilities yet.",
       "awaitingPrc": "Awaiting PRC verification",
-      "awaitingPrcEmpty": "No practitioners are waiting."
+      "awaitingPrcEmpty": "No practitioners are waiting.",
+      "affiliationRequests": "Affiliation requests ({count})",
+      "affiliationRequestsEmpty": "No requests waiting.",
+      "requestedOn": "Requested {date}",
+      "approve": "Approve",
+      "reject": "Reject",
+      "requestedVerification": "Asked to be verified · {date}"
     },
     "facilities": {
       "title": "Facilities",
@@ -275,7 +294,11 @@
       "goLiveTitle": "Profile visibility",
       "goLive": "Make profile live",
       "takeOffline": "Take profile offline",
-      "blockedHint": "This practitioner cannot go live or take bookings until PRC verification is recorded."
+      "blockedHint": "This practitioner cannot go live or take bookings until PRC verification is recorded.",
+      "account": "Doctor login",
+      "accountHint": "Link this profile to the doctor's account so they can manage their own schedule.",
+      "accountLabel": "Linked account",
+      "noAccount": "Not linked"
     },
     "services": {
       "title": "Services",
@@ -325,6 +348,215 @@
       "unknownActor": "Unknown account",
       "system": "System",
       "patientRecord": "Concerns a patient record"
+    }
+  },
+  "doctor": {
+    "nav": {
+      "today": "Today",
+      "calendar": "Calendar",
+      "appointments": "Appointments",
+      "availability": "Availability",
+      "profile": "Profile"
+    },
+    "unlinked": {
+      "title": "Profile not linked yet",
+      "body": "Your account is not linked to a practitioner profile yet. Please ask our team to link it; your calendar will appear here once that is done."
+    },
+    "status": {
+      "booked": "Booked",
+      "checked_in": "Checked in",
+      "seen": "Being seen",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "no_show": "No-show"
+    },
+    "home": {
+      "title": "{name}",
+      "notVerified": "Your schedule cannot be published or take bookings until our team records your PRC verification.",
+      "today": "Today's appointments",
+      "noneToday": "No appointments today."
+    },
+    "walkIn": {
+      "title": "Book a walk-in or call",
+      "noSlots": "No open slots in the next 14 days. Publish a schedule under Availability first.",
+      "book": "Book appointment",
+      "slot": "Slot",
+      "choose": "Choose…",
+      "seatsLeft": "{count, plural, one {# seat left} other {# seats left}}",
+      "service": "Service",
+      "returningPatient": "Returning patient",
+      "returningPatientHint": "Choose a patient you have seen before, or leave as new and enter a name.",
+      "newPatient": "New patient",
+      "patientName": "Patient's full name",
+      "patientPhone": "Mobile number",
+      "patientPhoneHint": "Optional. Used only to text the booking code and a reminder.",
+      "consent": "The patient agreed, in person or on the phone, to this booking and to being sent SMS about it."
+    },
+    "profile": {
+      "prc": "PRC status",
+      "prcNumber": "PRC licence number",
+      "notRecorded": "Not recorded",
+      "licenceExpiry": "Licence expiry",
+      "verifiedOn": "Verified on",
+      "prcReadOnly": "PRC details are recorded by our team and cannot be changed here.",
+      "specialties": "Specialties",
+      "specialtiesHint": "Separate with commas.",
+      "save": "Save",
+      "affiliations": "Clinic affiliations",
+      "noAffiliations": "No clinics yet.",
+      "facilityUnavailable": "Clinic no longer listed",
+      "remove": "Remove",
+      "clinic": "Clinic",
+      "clinicHint": "Only verified facilities are listed. Ask our team if yours is missing.",
+      "choose": "Choose…",
+      "requestAffiliation": "Request affiliation",
+      "affiliationsHint": "Each clinic needs approval from our team before you can set hours there.",
+      "affiliationStatus": {
+        "pending": "Awaiting approval",
+        "approved": "Approved",
+        "rejected": "Not approved"
+      }
+    },
+    "availability": {
+      "title": "Availability",
+      "cannotPublish": "You cannot publish a schedule until our team records your PRC verification.",
+      "noAffiliations": "You need an approved clinic affiliation before setting clinic hours.",
+      "goToProfile": "Go to profile",
+      "clinicUnavailable": "Clinic no longer listed",
+      "published": "Published: open for bookings",
+      "draft": "Draft: not open for bookings",
+      "publish": "Publish schedule",
+      "unpublish": "Unpublish schedule",
+      "sessions": "Weekly sessions",
+      "noSessions": "No sessions yet.",
+      "ruleSummary": "{minutes}-minute slots · capacity {capacity}",
+      "validRange": "{from} to {to}",
+      "validFrom": "From {from}",
+      "remove": "Remove",
+      "exceptions": "Upcoming exceptions",
+      "noExceptions": "No exceptions.",
+      "exceptionTypes": {
+        "blackout": "Blocked",
+        "holiday": "Holiday",
+        "leave": "Leave",
+        "extra_session": "Extra session"
+      },
+      "blockDays": "Block days",
+      "exceptionType": "Reason",
+      "firstDay": "First day",
+      "lastDay": "Last day",
+      "extraSession": "Add extra session",
+      "date": "Date",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "slotMinutes": "Slot length (minutes)",
+      "capacity": "Patients per slot",
+      "capacityHint": "For first-come-first-served, use one long slot with a higher number.",
+      "addSession": "Add a weekly session",
+      "addSessionHint": "Preview what the session produces before saving it.",
+      "clinic": "Clinic",
+      "choose": "Choose…",
+      "weekday": "Day of the week",
+      "validFromLabel": "Starts on",
+      "validToLabel": "Ends on",
+      "preview": "Preview",
+      "clearPreview": "Clear",
+      "previewTitle": "Preview: the next {days} days at this clinic",
+      "previewEmpty": "This session produces no slots in that period.",
+      "previewLegend": "Times in bold come from the new session. Nothing is saved yet.",
+      "saveSession": "Save this session",
+      "verificationRequested": "Verification requested on {date}; our team has been notified."
+    },
+    "appointments": {
+      "title": "Appointments",
+      "tabs": {
+        "today": "Today",
+        "upcoming": "Upcoming",
+        "past": "Past"
+      },
+      "empty": "No appointments."
+    },
+    "detail": {
+      "when": "When",
+      "clinic": "Clinic",
+      "service": "Service",
+      "phone": "Mobile number",
+      "noPhone": "None on record",
+      "bookingCode": "Booking code",
+      "channel": "Booked through",
+      "cancelReason": "Reason for cancelling",
+      "none": "—",
+      "visit": "Visit",
+      "mark": {
+        "checked_in": "Mark checked in",
+        "seen": "Mark being seen",
+        "completed": "Mark completed",
+        "no_show": "Mark as no-show"
+      },
+      "reschedule": "Reschedule",
+      "rescheduleHint": "The patient is sent an SMS with the new time.",
+      "noSlots": "No open slots in the next 4 weeks.",
+      "newSlot": "New slot",
+      "cancel": "Cancel appointment",
+      "cancelHint": "The patient is sent an SMS. A cancelled appointment cannot be reopened.",
+      "history": "History",
+      "messages": "SMS to the patient",
+      "noMessages": "No messages queued.",
+      "noPhoneNoSms": "No mobile number on record, so no SMS is sent."
+    },
+    "channels": {
+      "app": "App",
+      "web": "Website",
+      "assisted_counter": "At the practice",
+      "sms": "SMS",
+      "bot": "Chat"
+    },
+    "cancelReasons": {
+      "patient_request": "Patient asked to cancel",
+      "practitioner_unavailable": "Doctor unavailable",
+      "facility_closed": "Clinic closed",
+      "duplicate": "Duplicate booking",
+      "other": "Other"
+    },
+    "events": {
+      "booked": "Booked",
+      "rescheduled": "Rescheduled",
+      "cancelled": "Cancelled",
+      "no_show": "Marked as no-show",
+      "checked_in": "Checked in",
+      "seen": "Being seen",
+      "completed": "Completed"
+    },
+    "sms": {
+      "templates": {
+        "booking_confirmed": "Booking confirmation",
+        "booking_rescheduled": "Reschedule notice",
+        "booking_cancelled": "Cancellation notice",
+        "appointment_reminder": "Reminder"
+      },
+      "statuses": {
+        "queued": "Queued",
+        "sent": "Sent",
+        "failed": "Failed",
+        "cancelled": "Withdrawn"
+      }
+    },
+    "calendar": {
+      "weekOf": "Week of {date}",
+      "previous": "Previous",
+      "today": "Today",
+      "next": "Next",
+      "views": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month"
+      },
+      "booked": "{count} booked",
+      "free": "{count} free",
+      "dragHint": "Drag a booked appointment onto an open slot to reschedule it. On a touch screen, press and hold it first.",
+      "confirmMove": "Move this appointment to {time}? The patient will be sent an SMS.",
+      "noSlots": "No slots",
+      "book": "book"
     }
   }
 }

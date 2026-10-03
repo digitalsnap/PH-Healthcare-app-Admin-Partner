@@ -89,7 +89,20 @@
       "datesOrder": "Hindi puwedeng mauna ang petsa ng pagtatapos sa petsa ng simula.",
       "duplicate": "Mayroon na nito.",
       "cannotChangeOwnAccount": "Hindi mo mababago ang sarili mong role o access.",
-      "inviteFailed": "Hindi naipadala ang imbitasyon."
+      "inviteFailed": "Hindi naipadala ang imbitasyon.",
+      "timesOrder": "Dapat mas huli ang oras ng tapos kaysa sa oras ng simula.",
+      "invalidSlotLength": "Dapat magkasya ang haba ng slot sa sesyon (5 hanggang 720 minuto).",
+      "notAffiliated": "Idagdag muna ang klinikang ito sa profile mo.",
+      "affiliationInUse": "May iskedyul ang klinikang ito. Alisin muna ang mga sesyon nito bago alisin ang klinika.",
+      "slotFull": "Puno na ang slot na iyon.",
+      "slotUnavailable": "Hindi na available ang slot na iyon.",
+      "consentRequired": "Kumpirmahin muna ang pagpayag ng pasyente bago mag-book.",
+      "patientRequired": "Pumili ng dating pasyente o ilagay ang pangalan ng pasyente.",
+      "transitionNotAllowed": "Hindi na mababago nang ganoon ang appointment na ito.",
+      "noShowTooEarly": "Maaari lamang markahang hindi dumating kapag nagsimula na ang oras ng appointment.",
+      "rescheduleNotAllowed": "Naka-book na appointment lamang ang maililipat, at sa paparating na slot lamang.",
+      "reasonRequired": "Pumili ng dahilan ng pagkansela.",
+      "verificationRequested": "Hindi ka makakapag-publish hangga't hindi naitatala ang iyong beripikasyon sa PRC. Naabisuhan na ang aming team sa iyong hiling."
     },
     "freshness": {
       "lastVerified": "Huling na-verify {date}",
@@ -165,7 +178,13 @@
       "workQueue": "Susunod na i-verify",
       "workQueueEmpty": "Wala pang pasilidad.",
       "awaitingPrc": "Naghihintay ng beripikasyon sa PRC",
-      "awaitingPrcEmpty": "Walang doktor na naghihintay."
+      "awaitingPrcEmpty": "Walang doktor na naghihintay.",
+      "affiliationRequests": "Mga hiling ng affiliation ({count})",
+      "affiliationRequestsEmpty": "Walang naghihintay na hiling.",
+      "requestedOn": "Hiniling noong {date}",
+      "approve": "Aprubahan",
+      "reject": "Tanggihan",
+      "requestedVerification": "Humiling na ma-verify · {date}"
     },
     "facilities": {
       "title": "Mga pasilidad",
@@ -275,7 +294,11 @@
       "goLiveTitle": "Pagpapakita ng profile",
       "goLive": "Gawing live ang profile",
       "takeOffline": "Alisin sa live ang profile",
-      "blockedHint": "Hindi puwedeng mag-live o tumanggap ng booking ang doktor na ito hangga't hindi naitatala ang beripikasyon sa PRC."
+      "blockedHint": "Hindi puwedeng mag-live o tumanggap ng booking ang doktor na ito hangga't hindi naitatala ang beripikasyon sa PRC.",
+      "account": "Login ng doktor",
+      "accountHint": "I-link ang profile na ito sa account ng doktor para mapamahalaan nila ang sarili nilang iskedyul.",
+      "accountLabel": "Naka-link na account",
+      "noAccount": "Hindi naka-link"
     },
     "services": {
       "title": "Mga serbisyo",
@@ -325,6 +348,215 @@
       "unknownActor": "Hindi kilalang account",
       "system": "System",
       "patientRecord": "Tungkol sa rekord ng pasyente"
+    }
+  },
+  "doctor": {
+    "nav": {
+      "today": "Ngayon",
+      "calendar": "Kalendaryo",
+      "appointments": "Mga appointment",
+      "availability": "Iskedyul",
+      "profile": "Profile"
+    },
+    "unlinked": {
+      "title": "Hindi pa naka-link ang profile",
+      "body": "Hindi pa naka-link ang account mo sa isang practitioner profile. Pakisabihan ang aming team para i-link ito; lalabas dito ang kalendaryo mo kapag tapos na."
+    },
+    "status": {
+      "booked": "Naka-book",
+      "checked_in": "Naka-check in",
+      "seen": "Kinokonsulta",
+      "completed": "Tapos na",
+      "cancelled": "Kinansela",
+      "no_show": "Hindi dumating"
+    },
+    "home": {
+      "title": "{name}",
+      "notVerified": "Hindi mai-publish ang iskedyul mo o makakatanggap ng booking hangga't hindi naitatala ng aming team ang iyong beripikasyon sa PRC.",
+      "today": "Mga appointment ngayong araw",
+      "noneToday": "Walang appointment ngayong araw."
+    },
+    "walkIn": {
+      "title": "Mag-book ng walk-in o tawag",
+      "noSlots": "Walang bakanteng slot sa susunod na 14 na araw. Mag-publish muna ng iskedyul sa Iskedyul.",
+      "book": "I-book ang appointment",
+      "slot": "Slot",
+      "choose": "Pumili…",
+      "seatsLeft": "{count, plural, one {# bakante} other {# bakante}}",
+      "service": "Serbisyo",
+      "returningPatient": "Dating pasyente",
+      "returningPatientHint": "Pumili ng pasyenteng nakonsulta mo na, o iwanang bago at maglagay ng pangalan.",
+      "newPatient": "Bagong pasyente",
+      "patientName": "Buong pangalan ng pasyente",
+      "patientPhone": "Numero ng mobile",
+      "patientPhoneHint": "Opsyonal. Gagamitin lamang para i-text ang booking code at paalala.",
+      "consent": "Pumayag ang pasyente, nang personal o sa telepono, sa booking na ito at sa pagpapadala ng SMS tungkol dito."
+    },
+    "profile": {
+      "prc": "Status sa PRC",
+      "prcNumber": "Numero ng lisensya sa PRC",
+      "notRecorded": "Hindi pa naitala",
+      "licenceExpiry": "Pag-expire ng lisensya",
+      "verifiedOn": "Na-verify noong",
+      "prcReadOnly": "Ang aming team ang nagtatala ng detalye sa PRC at hindi ito mababago rito.",
+      "specialties": "Mga espesyalidad",
+      "specialtiesHint": "Paghiwalayin gamit ang kuwit.",
+      "save": "I-save",
+      "affiliations": "Mga klinikang kinabibilangan",
+      "noAffiliations": "Wala pang klinika.",
+      "facilityUnavailable": "Hindi na nakalista ang klinika",
+      "remove": "Alisin",
+      "clinic": "Klinika",
+      "clinicHint": "Mga na-verify na pasilidad lamang ang nakalista. Sabihan ang aming team kung wala ang sa iyo.",
+      "choose": "Pumili…",
+      "requestAffiliation": "Humiling ng affiliation",
+      "affiliationsHint": "Kailangan ng pag-apruba ng aming team ang bawat klinika bago ka makapagtakda ng oras doon.",
+      "affiliationStatus": {
+        "pending": "Naghihintay ng pag-apruba",
+        "approved": "Aprubado",
+        "rejected": "Hindi inaprubahan"
+      }
+    },
+    "availability": {
+      "title": "Iskedyul",
+      "cannotPublish": "Hindi ka makakapag-publish ng iskedyul hangga't hindi naitatala ng aming team ang iyong beripikasyon sa PRC.",
+      "noAffiliations": "Kailangan mo ng aprubadong klinika bago magtakda ng oras ng klinika.",
+      "goToProfile": "Pumunta sa profile",
+      "clinicUnavailable": "Hindi na nakalista ang klinika",
+      "published": "Naka-publish: bukas sa booking",
+      "draft": "Draft: hindi pa bukas sa booking",
+      "publish": "I-publish ang iskedyul",
+      "unpublish": "Alisin sa publish ang iskedyul",
+      "sessions": "Lingguhang sesyon",
+      "noSessions": "Wala pang sesyon.",
+      "ruleSummary": "{minutes} minutong slot · kapasidad {capacity}",
+      "validRange": "{from} hanggang {to}",
+      "validFrom": "Mula {from}",
+      "remove": "Alisin",
+      "exceptions": "Mga paparating na eksepsyon",
+      "noExceptions": "Walang eksepsyon.",
+      "exceptionTypes": {
+        "blackout": "Naka-block",
+        "holiday": "Holiday",
+        "leave": "Leave",
+        "extra_session": "Dagdag na sesyon"
+      },
+      "blockDays": "Mag-block ng mga araw",
+      "exceptionType": "Dahilan",
+      "firstDay": "Unang araw",
+      "lastDay": "Huling araw",
+      "extraSession": "Magdagdag ng sesyon",
+      "date": "Petsa",
+      "startTime": "Oras ng simula",
+      "endTime": "Oras ng tapos",
+      "slotMinutes": "Haba ng slot (minuto)",
+      "capacity": "Pasyente bawat slot",
+      "capacityHint": "Para sa first-come-first-served, gumamit ng isang mahabang slot na may mas mataas na bilang.",
+      "addSession": "Magdagdag ng lingguhang sesyon",
+      "addSessionHint": "I-preview muna ang ilalabas ng sesyon bago i-save.",
+      "clinic": "Klinika",
+      "choose": "Pumili…",
+      "weekday": "Araw ng linggo",
+      "validFromLabel": "Magsisimula sa",
+      "validToLabel": "Matatapos sa",
+      "preview": "I-preview",
+      "clearPreview": "I-clear",
+      "previewTitle": "Preview: susunod na {days} araw sa klinikang ito",
+      "previewEmpty": "Walang ilalabas na slot ang sesyong ito sa panahong iyon.",
+      "previewLegend": "Ang mga oras na naka-bold ay galing sa bagong sesyon. Wala pang nase-save.",
+      "saveSession": "I-save ang sesyong ito",
+      "verificationRequested": "Hiniling ang beripikasyon noong {date}; naabisuhan na ang aming team."
+    },
+    "appointments": {
+      "title": "Mga appointment",
+      "tabs": {
+        "today": "Ngayon",
+        "upcoming": "Paparating",
+        "past": "Nakaraan"
+      },
+      "empty": "Walang appointment."
+    },
+    "detail": {
+      "when": "Kailan",
+      "clinic": "Klinika",
+      "service": "Serbisyo",
+      "phone": "Numero ng mobile",
+      "noPhone": "Walang nakatala",
+      "bookingCode": "Booking code",
+      "channel": "Paraan ng pag-book",
+      "cancelReason": "Dahilan ng pagkansela",
+      "none": "—",
+      "visit": "Pagbisita",
+      "mark": {
+        "checked_in": "Markahang naka-check in",
+        "seen": "Markahang kinokonsulta",
+        "completed": "Markahang tapos na",
+        "no_show": "Markahang hindi dumating"
+      },
+      "reschedule": "Ilipat ang iskedyul",
+      "rescheduleHint": "Padadalhan ng SMS ang pasyente tungkol sa bagong oras.",
+      "noSlots": "Walang bakanteng slot sa susunod na 4 na linggo.",
+      "newSlot": "Bagong slot",
+      "cancel": "Kanselahin ang appointment",
+      "cancelHint": "Padadalhan ng SMS ang pasyente. Hindi na mabubuksang muli ang kinanselang appointment.",
+      "history": "Kasaysayan",
+      "messages": "SMS sa pasyente",
+      "noMessages": "Walang nakapilang mensahe.",
+      "noPhoneNoSms": "Walang nakatalang numero ng mobile, kaya walang ipapadalang SMS."
+    },
+    "channels": {
+      "app": "App",
+      "web": "Website",
+      "assisted_counter": "Sa klinika",
+      "sms": "SMS",
+      "bot": "Chat"
+    },
+    "cancelReasons": {
+      "patient_request": "Hiniling ng pasyente",
+      "practitioner_unavailable": "Hindi available ang doktor",
+      "facility_closed": "Sarado ang klinika",
+      "duplicate": "Dobleng booking",
+      "other": "Iba pa"
+    },
+    "events": {
+      "booked": "Na-book",
+      "rescheduled": "Inilipat ang iskedyul",
+      "cancelled": "Kinansela",
+      "no_show": "Minarkahang hindi dumating",
+      "checked_in": "Nag-check in",
+      "seen": "Kinokonsulta",
+      "completed": "Tapos na"
+    },
+    "sms": {
+      "templates": {
+        "booking_confirmed": "Kumpirmasyon ng booking",
+        "booking_rescheduled": "Abiso ng paglipat",
+        "booking_cancelled": "Abiso ng pagkansela",
+        "appointment_reminder": "Paalala"
+      },
+      "statuses": {
+        "queued": "Nakapila",
+        "sent": "Naipadala",
+        "failed": "Hindi naipadala",
+        "cancelled": "Binawi"
+      }
+    },
+    "calendar": {
+      "weekOf": "Linggo ng {date}",
+      "previous": "Nakaraan",
+      "today": "Ngayon",
+      "next": "Susunod",
+      "views": {
+        "day": "Araw",
+        "week": "Linggo",
+        "month": "Buwan"
+      },
+      "booked": "{count} naka-book",
+      "free": "{count} bakante",
+      "dragHint": "I-drag ang naka-book na appointment papunta sa bakanteng slot para ilipat ito. Sa touch screen, pindutin muna ito nang matagal.",
+      "confirmMove": "Ilipat ang appointment na ito sa {time}? Padadalhan ng SMS ang pasyente.",
+      "noSlots": "Walang slot",
+      "book": "mag-book"
     }
   }
 }

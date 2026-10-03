@@ -24,7 +24,7 @@ import {
 } from "@/lib/admin/actions/facilities";
 import { adminContext } from "@/lib/admin/context";
 import { idSchema, SETTABLE_STATUSES, WEEKDAYS } from "@/lib/admin/schemas";
-import { manilaToday } from "@/lib/admin/time";
+import { manilaToday } from "@/lib/time/manila";
 import type {
   AccreditationRow,
   CoverageProgramRow,

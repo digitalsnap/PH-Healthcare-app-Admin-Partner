@@ -186,7 +186,7 @@ describe.skipIf(!testDatabaseUrl)("concurrent slot booking", () => {
     const booked = await bookOnOwnConnection(slotId, patientA, fixture);
     if (!booked.ok) throw new Error("expected the booking to succeed");
 
-    await db.query("update public.appointment set status = 'cancelled' where id = $1", [
+    await db.query("update public.appointment set status = 'cancelled', cancel_reason = 'patient_request' where id = $1", [
       booked.appointmentId,
     ]);
     expect(await slotState(db, slotId)).toEqual({ remaining: 1, seats: [] });

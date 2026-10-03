@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
+import { ActionForm } from "@/components/admin/action-form";
 import { Empty, LIST, PageHeader, ROW_LINK, Section } from "@/components/admin/fields";
 import { FreshnessBadge } from "@/components/admin/freshness-badge";
+import { decideAffiliation } from "@/lib/admin/actions/practitioners";
 import { adminContext } from "@/lib/admin/context";
 import {
   daysAgoIso,
@@ -30,7 +32,7 @@ export default async function AdminDashboardPage() {
   const counted = { count: "exact", head: true } as const;
   const stockCutoff = daysAgoIso(STOCK_REPORT_MAX_AGE_DAYS, now);
 
-  const [total, verified, noPrices, staleStock, unverifiedDoctors, queue, awaitingPrc] =
+  const [total, verified, noPrices, staleStock, unverifiedDoctors, queue, awaitingPrc, affiliationRequests] =
     await Promise.all([
       supabase.from("facility_admin_view").select("id", counted),
       supabase
@@ -52,9 +54,17 @@ export default async function AdminDashboardPage() {
         .limit(QUEUE_SIZE),
       supabase
         .from("practitioner")
-        .select("id, full_name, prc_number")
+        .select("id, full_name, prc_number, verification_requested_at")
         .is("prc_verified_at", null)
+        // Doctors who asked to be verified come first.
+        .order("verification_requested_at", { ascending: true, nullsFirst: false })
         .order("created_at", { ascending: true })
+        .limit(QUEUE_SIZE),
+      supabase
+        .from("practitioner_facility")
+        .select("id, requested_at, practitioner(id, full_name), facility(id, name)", { count: "exact" })
+        .eq("status", "pending")
+        .order("requested_at", { ascending: true })
         .limit(QUEUE_SIZE),
     ]);
 
@@ -64,7 +74,17 @@ export default async function AdminDashboardPage() {
     FacilityRow,
     "id" | "name" | "facility_type" | "municipality_name" | "last_verified_at"
   >[];
-  const prcRows = (awaitingPrc.data ?? []) as Pick<PractitionerRow, "id" | "full_name" | "prc_number">[];
+  const prcRows = (awaitingPrc.data ?? []) as (Pick<PractitionerRow, "id" | "full_name" | "prc_number"> & {
+    verification_requested_at: string | null;
+  })[];
+  const requestRows = (affiliationRequests.data ?? []) as unknown as {
+    id: string;
+    requested_at: string;
+    practitioner: { id: string; full_name: string } | null;
+    facility: { id: string; name: string } | null;
+  }[];
+  const format = await getFormatter();
+  const date = (value: string) => format.dateTime(new Date(value), { dateStyle: "medium" });
 
   return (
     <>
@@ -114,6 +134,35 @@ export default async function AdminDashboardPage() {
         )}
       </Section>
 
+      <Section title={t("dashboard.affiliationRequests", { count: affiliationRequests.count ?? 0 })}>
+        {requestRows.length === 0 ? (
+          <Empty>{t("dashboard.affiliationRequestsEmpty")}</Empty>
+        ) : (
+          <ul className={LIST}>
+            {requestRows.map((request) => (
+              <li key={request.id} className="flex flex-col gap-2 px-3 py-3">
+                <span className="font-medium">
+                  {request.practitioner?.full_name} → {request.facility?.name}
+                </span>
+                <span className="text-sm text-zinc-600">
+                  {t("dashboard.requestedOn", { date: date(request.requested_at) })}
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  <ActionForm action={decideAffiliation} submitLabel={t("dashboard.approve")}>
+                    <input type="hidden" name="id" value={request.id} />
+                    <input type="hidden" name="decision" value="approved" />
+                  </ActionForm>
+                  <ActionForm action={decideAffiliation} submitLabel={t("dashboard.reject")} variant="danger">
+                    <input type="hidden" name="id" value={request.id} />
+                    <input type="hidden" name="decision" value="rejected" />
+                  </ActionForm>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Section>
+
       <Section title={t("dashboard.awaitingPrc")}>
         {prcRows.length === 0 ? (
           <Empty>{t("dashboard.awaitingPrcEmpty")}</Empty>
@@ -126,6 +175,11 @@ export default async function AdminDashboardPage() {
                   <span className="text-sm text-zinc-600">
                     {practitioner.prc_number ?? t("practitioners.noPrcNumber")}
                   </span>
+                  {practitioner.verification_requested_at && (
+                    <span className="w-fit rounded border border-amber-400 bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">
+                      {t("dashboard.requestedVerification", { date: date(practitioner.verification_requested_at) })}
+                    </span>
+                  )}
                 </Link>
               </li>
             ))}

@@ -30,6 +30,19 @@ export const FORM_ERRORS = [
   "duplicate",
   "cannotChangeOwnAccount",
   "inviteFailed",
+  "timesOrder",
+  "invalidSlotLength",
+  "notAffiliated",
+  "affiliationInUse",
+  "slotFull",
+  "slotUnavailable",
+  "consentRequired",
+  "patientRequired",
+  "transitionNotAllowed",
+  "noShowTooEarly",
+  "rescheduleNotAllowed",
+  "reasonRequired",
+  "verificationRequested",
 ] as const;
 
 export type FormError = (typeof FORM_ERRORS)[number];

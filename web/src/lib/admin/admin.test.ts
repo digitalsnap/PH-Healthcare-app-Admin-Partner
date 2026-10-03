@@ -12,7 +12,7 @@ import {
   parsePriceForm,
   type Parsed,
 } from "./schemas";
-import { manilaDateToUtcIso, manilaToday, utcIsoToManilaDate } from "./time";
+import { manilaDateToUtcIso, manilaToday, utcIsoToManilaDate } from "@/lib/time/manila";
 
 const ID = "3f2b8c1e-5d4a-4b6f-9a7e-1c2d3e4f5a6b";
 const OTHER_ID = "7a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d";

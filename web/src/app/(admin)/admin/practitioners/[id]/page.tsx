@@ -1,12 +1,17 @@
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { ActionForm } from "@/components/admin/action-form";
-import { Facts, Field, Input, PageHeader, Section } from "@/components/admin/fields";
+import { Facts, Field, Input, PageHeader, Section, Select } from "@/components/admin/fields";
 import { PrcBadge } from "@/components/admin/prc-badge";
-import { revokePrc, setPractitionerLive, verifyPrc } from "@/lib/admin/actions/practitioners";
+import {
+  linkPractitionerAccount,
+  revokePrc,
+  setPractitionerLive,
+  verifyPrc,
+} from "@/lib/admin/actions/practitioners";
 import { adminContext } from "@/lib/admin/context";
 import { idSchema } from "@/lib/admin/schemas";
-import { manilaToday } from "@/lib/admin/time";
+import { manilaToday } from "@/lib/time/manila";
 import type { PractitionerRow } from "@/lib/admin/types";
 
 export default async function PractitionerPage({ params }: PageProps<"/admin/practitioners/[id]">) {
@@ -19,7 +24,7 @@ export default async function PractitionerPage({ params }: PageProps<"/admin/pra
   const { data } = await supabase
     .from("practitioner")
     .select(
-      "id, full_name, prc_number, prc_licence_expires_on, specialties, prc_verified_at, prc_verified_by, is_live",
+      "id, app_user_id, full_name, prc_number, prc_licence_expires_on, specialties, prc_verified_at, prc_verified_by, is_live",
     )
     .eq("id", id.data)
     .maybeSingle();
@@ -35,6 +40,15 @@ export default async function PractitionerPage({ params }: PageProps<"/admin/pra
         .eq("id", practitioner.prc_verified_by)
         .maybeSingle()
     : { data: null };
+
+  // Doctor logins this profile could be linked to.
+  const { data: doctorAccounts } = await supabase
+    .from("app_user")
+    .select("id, display_name")
+    .eq("role", "doctor")
+    .order("display_name")
+    .limit(500);
+  const accounts = (doctorAccounts ?? []) as { id: string; display_name: string | null }[];
 
   const today = manilaToday();
   const expired =
@@ -112,6 +126,23 @@ export default async function PractitionerPage({ params }: PageProps<"/admin/pra
         ) : (
           <p className="text-sm font-medium text-red-800">{t("practitioners.blockedHint")}</p>
         )}
+      </Section>
+
+      <Section title={t("practitioners.account")}>
+        <p className="text-sm text-zinc-600">{t("practitioners.accountHint")}</p>
+        <ActionForm action={linkPractitionerAccount} submitLabel={t("common.save")} variant="secondary">
+          <input type="hidden" name="id" value={practitioner.id} />
+          <Field label={t("practitioners.accountLabel")}>
+            <Select name="app_user_id" defaultValue={practitioner.app_user_id ?? ""}>
+              <option value="">{t("practitioners.noAccount")}</option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.display_name ?? t("users.unnamed")}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        </ActionForm>
       </Section>
     </>
   );

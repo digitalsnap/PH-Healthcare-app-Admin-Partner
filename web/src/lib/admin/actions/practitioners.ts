@@ -120,3 +120,67 @@ export async function setPractitionerLive(
   revalidatePath("/admin", "layout");
   return SAVED;
 }
+
+/**
+ * Links a practitioner profile to the doctor's login, so that account can
+ * manage this profile's schedule. Only accounts with the doctor role qualify.
+ */
+export async function linkPractitionerAccount(
+  _previous: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const { supabase, actorId } = await adminContext();
+  const id = idSchema.safeParse(formData.get("id"));
+  if (!id.success) return failed("generic");
+  const rawAccount = formData.get("app_user_id");
+  const account = rawAccount ? idSchema.safeParse(rawAccount) : null;
+  if (account && !account.success) return failed("invalidChoice");
+
+  if (account) {
+    const { data } = await supabase
+      .from("app_user")
+      .select("id")
+      .eq("id", account.data)
+      .eq("role", "doctor")
+      .maybeSingle();
+    if (!data) return failed("invalidChoice");
+  }
+
+  const { error } = await supabase
+    .from("practitioner")
+    .update({ app_user_id: account ? account.data : null })
+    .eq("id", id.data);
+  if (isUniqueViolation(error)) return failed("duplicate");
+  if (error) return failed("generic");
+
+  await logAccess(supabase, actorId, {
+    action: "practitioner.link_account",
+    resourceType: "practitioner",
+    resourceId: id.data,
+  });
+  revalidatePath("/admin", "layout");
+  return SAVED;
+}
+
+/** Approves or rejects a doctor's request to be affiliated with a facility. */
+export async function decideAffiliation(_previous: FormState, formData: FormData): Promise<FormState> {
+  const { supabase, actorId } = await adminContext();
+  const id = idSchema.safeParse(formData.get("id"));
+  const decision = formData.get("decision");
+  if (!id.success || (decision !== "approved" && decision !== "rejected")) return failed("generic");
+
+  const { error } = await supabase
+    .from("practitioner_facility")
+    .update({ status: decision, decided_at: new Date().toISOString(), decided_by: actorId })
+    .eq("id", id.data)
+    .eq("status", "pending");
+  if (error) return failed("generic");
+
+  await logAccess(supabase, actorId, {
+    action: `practitioner_facility.${decision}`,
+    resourceType: "practitioner_facility",
+    resourceId: id.data,
+  });
+  revalidatePath("/admin", "layout");
+  return SAVED;
+}

@@ -32,6 +32,28 @@ verification), `services`, `coverage`, and — for the `admin` role only —
 - Facilities need `location` rows (PSGC) to exist first; there is no location
   import screen yet.
 
+## Doctor dashboard
+
+`/partner/doctor` is today's appointments. Under it: `calendar` (day, week,
+month), `appointments` (today, upcoming, past, and a page per appointment),
+`appointments/new` (walk-in or phone booking), `availability` (weekly
+sessions per clinic, exceptions, publish) and `profile`.
+
+- Slots are never posted by a client. `src/lib/scheduling/generate.ts` turns
+  rules and exceptions into slots; the same function powers the preview and
+  the write, which goes through the `sync_schedule_slots` database function
+  with the service role.
+- Clinic affiliations are requested by the doctor and approved by the internal
+  team (admin dashboard); only an approved clinic can carry a schedule.
+- A published schedule keeps slots generated 56 days ahead. They are
+  regenerated whenever a rule, an exception or the publish state changes;
+  nothing yet extends the horizon on a timer.
+- Booking, rescheduling and state changes are enforced by database triggers
+  (seat lock, legal transitions, PRC verification) and each writes an
+  `appointment_event` and queues rows in `sms_message`. Nothing sends that
+  queue yet.
+- Every screen that shows a patient's name writes `access_log` rows.
+
 ## Commands
 
 ```bash

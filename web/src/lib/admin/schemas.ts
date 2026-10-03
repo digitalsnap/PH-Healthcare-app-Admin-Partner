@@ -8,7 +8,7 @@ import { APP_ROLES } from "@/lib/auth/roles";
 import { PRICE_SOURCES } from "@/lib/coverage";
 import { parsePesos, type Centavos } from "@/lib/money";
 import { errorsFromIssues, type FormError, type FormState } from "./form-state";
-import { manilaDateToUtcIso, manilaToday } from "./time";
+import { manilaDateToUtcIso, manilaToday } from "@/lib/time/manila";
 
 export const FACILITY_TYPES = [
   "yakap_clinic",
@@ -56,32 +56,32 @@ export const WEEKDAYS = [1, 2, 3, 4, 5, 6, 7] as const;
 
 export type Parsed<T> = { ok: true; data: T } | { ok: false; state: FormState };
 
-const err = (code: FormError) => code;
+export const err = (code: FormError) => code;
 
-function fail<T>(...codes: FormError[]): Parsed<T> {
+export function fail<T>(...codes: FormError[]): Parsed<T> {
   return { ok: false, state: { errors: codes } };
 }
 
 /** Form fields arrive as strings; an empty field means "not provided". */
-function text(formData: FormData, key: string): string | undefined {
+export function text(formData: FormData, key: string): string | undefined {
   const value = formData.get(key);
   if (typeof value !== "string") return undefined;
   const trimmed = value.trim();
   return trimmed === "" ? undefined : trimmed;
 }
 
-function fields(formData: FormData, keys: readonly string[]): Record<string, string | undefined> {
+export function fields(formData: FormData, keys: readonly string[]): Record<string, string | undefined> {
   return Object.fromEntries(keys.map((key) => [key, text(formData, key)]));
 }
 
-function parseWith<S extends z.ZodType>(schema: S, input: unknown): Parsed<z.infer<S>> {
+export function parseWith<S extends z.ZodType>(schema: S, input: unknown): Parsed<z.infer<S>> {
   const result = schema.safeParse(input);
   if (!result.success) return { ok: false, state: errorsFromIssues(result.error.issues) };
   return { ok: true, data: result.data };
 }
 
-const uuid = z.uuid(err("invalidChoice"));
-const isoDate = z.iso.date(err("invalidDate"));
+export const uuid = z.uuid(err("invalidChoice"));
+export const isoDate = z.iso.date(err("invalidDate"));
 const psgcCode = z.string().regex(/^[0-9]{10}$/, err("invalidChoice"));
 const httpUrl = z
   .url(err("invalidUrl"))
