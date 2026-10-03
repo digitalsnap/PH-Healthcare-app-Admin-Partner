@@ -54,6 +54,51 @@ sessions per clinic, exceptions, publish) and `profile`.
   queue yet.
 - Every screen that shows a patient's name writes `access_log` rows.
 
+## Provider portals
+
+`/partner/provider` lists the facilities the signed-in staff member's
+organization owns; `/partner/provider/<facility>` is that facility's portal.
+Which portal it is follows the facility type (`src/lib/provider/segments.ts`):
+
+| Portal | Sections |
+|---|---|
+| Clinic | queue, bookings, calendar, schedule, services and prices, profile |
+| Diagnostics | bookings (with home service), calendar, results, schedule, services and prices (with preparation instructions), profile |
+| Pharmacy | stock, reservations, refills, services and prices, profile |
+
+- Staff are assigned to an **organization** by the internal team
+  (`/admin/organizations`); a facility belongs to an organization through
+  `parent_org_id`. `can_manage_facility()` in the database is the single test
+  of whether someone may act for a facility.
+- Counter flows (booking, reservation, refill request) need the patient's
+  consent tick, which is written to the access log in the same transaction.
+- Result files go to the private `vault` storage bucket under
+  `<facility>/<document>` and are only ever opened through a 60-second signed
+  URL. The code uses the real Supabase Storage API; it has so far only been
+  exercised against a local stub, so check it once a Supabase project exists.
+- A facility can ask for a wrongly delivered result to be withdrawn. The
+  patient stops seeing it at once; the internal team approves (the file is
+  deleted) or rejects from the admin dashboard.
+  If storage does not confirm the deletion, the withdrawal stays in the
+  admin queue to be retried; an admin (not field staff) can close it by hand,
+  which is recorded under their name (`src/lib/admin/actions/withdrawals.ts`).
+- There is no billing anywhere: no invoices, payments or receipts.
+
+## SMS
+
+Transactional SMS is one-way. The database queues rows in `sms_message`
+whenever an appointment is booked, moved or cancelled; nothing is sent until a
+carrier is configured.
+
+- `src/lib/sms/carrier.ts` is the boundary a carrier has to fit, with the
+  steps to add one. `SMS_CARRIER` selects it; empty means "send nothing".
+- `src/lib/sms/render.ts` composes the text at send time from fixed wording
+  in `messages/*.json` (`sms.*`): a booking code, a time in Manila, a place.
+- `POST /api/internal/sms/dispatch` sends what is due. A scheduler calls it
+  with `Authorization: Bearer <CRON_SECRET>`. Two schedulers at once never
+  send the same message, and a failure is retried up to three times.
+- Reservations and refill requests have templates but do not queue anything yet.
+
 ## Commands
 
 ```bash

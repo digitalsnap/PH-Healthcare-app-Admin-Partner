@@ -111,6 +111,7 @@ export type FacilityInput = {
   facility_type: FacilityType;
   municipality_code: string;
   barangay_code: string | null;
+  parent_org_id: string | null;
   address_line: string | null;
   phone: string | null;
   /** EWKT for the PostGIS point, or null when no coordinates were given. */
@@ -124,6 +125,7 @@ const facilityBase = z.object({
   facility_type: z.enum(FACILITY_TYPES, err("invalidChoice")),
   municipality_code: psgcCode,
   barangay_code: psgcCode.optional(),
+  parent_org_id: uuid.optional(),
   address_line: z.string().max(300, err("generic")).optional(),
   phone: phone.optional(),
 });
@@ -147,7 +149,7 @@ function parseCoordinates(formData: FormData): Parsed<string | null> {
   return { ok: true, data: `SRID=4326;POINT(${lng} ${lat})` };
 }
 
-function parseHours(formData: FormData): Parsed<FacilityHours> {
+export function parseHours(formData: FormData): Parsed<FacilityHours> {
   const hours: FacilityHours = {};
   for (const day of WEEKDAYS) {
     const open = text(formData, `hours_${day}_open`);
@@ -185,6 +187,7 @@ export function parseFacilityForm(formData: FormData): Parsed<FacilityInput> {
       "facility_type",
       "municipality_code",
       "barangay_code",
+      "parent_org_id",
       "address_line",
       "phone",
     ]),
@@ -204,6 +207,7 @@ export function parseFacilityForm(formData: FormData): Parsed<FacilityInput> {
       facility_type: base.data.facility_type,
       municipality_code: base.data.municipality_code,
       barangay_code: base.data.barangay_code ?? null,
+      parent_org_id: base.data.parent_org_id ?? null,
       address_line: base.data.address_line ?? null,
       phone: base.data.phone ?? null,
       geog: geog.data,

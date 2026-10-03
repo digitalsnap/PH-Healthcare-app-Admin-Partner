@@ -13,6 +13,7 @@ import type {
 
 export type FacilityRow = {
   id: string;
+  parent_org_id: string | null;
   name: string;
   facility_type: FacilityType;
   municipality_code: string;
@@ -32,6 +33,8 @@ export type FacilityRow = {
 };
 
 export type LocationOption = { psgc_code: string; name: string };
+
+export type OrganizationOption = { id: string; name: string };
 
 export type PractitionerRow = {
   id: string;

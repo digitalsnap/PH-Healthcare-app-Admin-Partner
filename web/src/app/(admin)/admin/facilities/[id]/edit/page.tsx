@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/admin/fields";
 import { updateFacility } from "@/lib/admin/actions/facilities";
 import { adminContext } from "@/lib/admin/context";
 import { idSchema } from "@/lib/admin/schemas";
-import type { FacilityRow, LocationOption } from "@/lib/admin/types";
+import type { FacilityRow, LocationOption, OrganizationOption } from "@/lib/admin/types";
 
 export default async function EditFacilityPage({ params }: PageProps<"/admin/facilities/[id]/edit">) {
   const { supabase } = await adminContext();
@@ -18,7 +18,7 @@ export default async function EditFacilityPage({ params }: PageProps<"/admin/fac
   if (!data) notFound();
   const facility = data as FacilityRow;
 
-  const [{ data: municipalities }, { data: barangays }] = await Promise.all([
+  const [{ data: municipalities }, { data: barangays }, { data: organizations }] = await Promise.all([
     supabase.from("location").select("psgc_code, name").eq("level", "municipality").order("name"),
     supabase
       .from("location")
@@ -26,6 +26,7 @@ export default async function EditFacilityPage({ params }: PageProps<"/admin/fac
       .eq("level", "barangay")
       .eq("municipality_code", facility.municipality_code)
       .order("name"),
+    supabase.from("organization").select("id, name").order("name").limit(500),
   ]);
 
   return (
@@ -36,6 +37,7 @@ export default async function EditFacilityPage({ params }: PageProps<"/admin/fac
         <FacilityFields
           facility={facility}
           municipalities={(municipalities ?? []) as LocationOption[]}
+          organizations={(organizations ?? []) as OrganizationOption[]}
           barangays={(barangays ?? []) as LocationOption[]}
         />
       </ActionForm>

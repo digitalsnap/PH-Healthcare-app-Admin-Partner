@@ -7,9 +7,12 @@ import type { AppointmentRow } from "@/lib/doctor/types";
 export async function AppointmentList({
   appointments,
   showDate = true,
+  basePath = "/partner/doctor/appointments",
 }: {
   appointments: AppointmentRow[];
   showDate?: boolean;
+  /** Where an appointment’s own page lives: the doctor dashboard or a facility portal. */
+  basePath?: string;
 }) {
   const t = await getTranslations("doctor");
   const format = await getFormatter();
@@ -20,7 +23,7 @@ export async function AppointmentList({
         const start = new Date(appointment.starts_at);
         return (
           <li key={appointment.id}>
-            <Link href={`/partner/doctor/appointments/${appointment.id}`} className={ROW_LINK}>
+            <Link href={`${basePath}/${appointment.id}`} className={ROW_LINK}>
               <span className="font-medium">
                 {showDate
                   ? format.dateTime(start, { dateStyle: "medium", timeStyle: "short" })

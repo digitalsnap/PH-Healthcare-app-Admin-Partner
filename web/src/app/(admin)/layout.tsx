@@ -13,6 +13,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin/practitioners", label: nav("practitioners") },
     { href: "/admin/services", label: nav("services") },
     { href: "/admin/coverage", label: nav("coverage") },
+    { href: "/admin/organizations", label: nav("organizations") },
   ];
   // Accounts and the access log are for admins only.
   if (session.role === "admin") {

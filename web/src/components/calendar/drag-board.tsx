@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { rescheduleByDrag } from "@/lib/doctor/actions/appointments";
-import type { FormError } from "@/lib/admin/form-state";
+import type { FormError, FormState } from "@/lib/admin/form-state";
 
 export type BoardAppointment = {
   id: string;
@@ -30,6 +29,17 @@ export type BoardDay = {
   slots: BoardSlot[];
 };
 
+/** Where the board's links lead: it serves the doctor dashboard and the facility portals. */
+export type BoardPaths = {
+  /** An appointment's page is `${appointments}/${id}`. */
+  appointments: string;
+  calendar: string;
+  newBooking: string;
+};
+
+/** The server action that moves an appointment into a slot. */
+export type MoveAction = (appointmentId: string, slotId: string) => Promise<FormState>;
+
 const DRAG_TYPE = "text/x-appointment-id";
 /** How long a finger must rest on an appointment before it lifts. */
 const HOLD_MS = 350;
@@ -47,7 +57,7 @@ type TouchDrag = { appointmentId: string; x: number; y: number; active: boolean 
  * and drop does not exist, so a press-and-hold lifts the appointment and it
  * follows the finger; a quick swipe still scrolls the page.
  */
-export function DragBoard({ days }: { days: BoardDay[] }) {
+export function DragBoard({ days, paths, move }: { days: BoardDay[]; paths: BoardPaths; move: MoveAction }) {
   const t = useTranslations("doctor.calendar");
   const errors = useTranslations("admin.errors");
   const [pending, startTransition] = useTransition();
@@ -76,7 +86,7 @@ export function DragBoard({ days }: { days: BoardDay[] }) {
     if (!window.confirm(t("confirmMove", { time: slot.timeLabel }))) return;
     setError(null);
     startTransition(async () => {
-      const result = await rescheduleByDrag(appointmentId, slot.id);
+      const result = await move(appointmentId, slot.id);
       if (result && "errors" in result) setError(result.errors[0] ?? "generic");
     });
   }
@@ -158,7 +168,7 @@ export function DragBoard({ days }: { days: BoardDay[] }) {
         {days.map((day) => (
           <section key={day.date} className="flex min-w-0 flex-col gap-2">
             <h2 className="text-sm font-semibold">
-              <Link href={`/partner/doctor/calendar?view=day&date=${day.date}`} className="underline">
+              <Link href={`${paths.calendar}?view=day&date=${day.date}`} className="underline">
                 {day.label}
               </Link>
             </h2>
@@ -190,7 +200,7 @@ export function DragBoard({ days }: { days: BoardDay[] }) {
                 {slot.appointments.map((appointment) => (
                   <Link
                     key={appointment.id}
-                    href={`/partner/doctor/appointments/${appointment.id}`}
+                    href={`${paths.appointments}/${appointment.id}`}
                     draggable={appointment.movable}
                     onDragStart={(event) => {
                       event.dataTransfer.setData(DRAG_TYPE, appointment.id);
@@ -215,7 +225,7 @@ export function DragBoard({ days }: { days: BoardDay[] }) {
                 ))}
                 {slot.open && (
                   <Link
-                    href={`/partner/doctor/appointments/new?slot=${slot.id}`}
+                    href={`${paths.newBooking}?slot=${slot.id}`}
                     className="flex min-h-11 items-center text-zinc-600 underline"
                   >
                     {slot.seatsLabel} · {t("book")}

@@ -4,7 +4,7 @@ import { FacilityFields } from "@/components/admin/facility-fields";
 import { PageHeader } from "@/components/admin/fields";
 import { createFacility } from "@/lib/admin/actions/facilities";
 import { adminContext } from "@/lib/admin/context";
-import type { LocationOption } from "@/lib/admin/types";
+import type { LocationOption, OrganizationOption } from "@/lib/admin/types";
 
 export default async function NewFacilityPage() {
   const { supabase } = await adminContext();
@@ -15,11 +15,16 @@ export default async function NewFacilityPage() {
     .eq("level", "municipality")
     .order("name");
 
+  const { data: organizations } = await supabase.from("organization").select("id, name").order("name").limit(500);
+
   return (
     <>
       <PageHeader title={t("facilities.new")} />
       <ActionForm action={createFacility} submitLabel={t("common.save")}>
-        <FacilityFields municipalities={(data ?? []) as LocationOption[]} />
+        <FacilityFields
+          municipalities={(data ?? []) as LocationOption[]}
+          organizations={(organizations ?? []) as OrganizationOption[]}
+        />
       </ActionForm>
     </>
   );

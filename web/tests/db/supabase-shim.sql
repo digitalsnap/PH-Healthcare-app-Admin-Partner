@@ -50,3 +50,28 @@ grant usage on schema public to anon, authenticated, service_role;
 alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
 alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
 alter default privileges in schema public grant execute on functions to anon, authenticated, service_role;
+
+-- Supabase Storage keeps its metadata in the storage schema; the vault
+-- policies are written against storage.objects. This is the minimum shape
+-- those policies need, so they can be tested without the Storage service.
+create schema storage;
+
+create table storage.buckets (
+  id text primary key,
+  name text not null,
+  public boolean not null default false
+);
+
+create table storage.objects (
+  id uuid primary key default gen_random_uuid(),
+  bucket_id text not null references storage.buckets (id),
+  name text not null,
+  owner uuid,
+  created_at timestamptz not null default now(),
+  unique (bucket_id, name)
+);
+
+alter table storage.objects enable row level security;
+
+grant usage on schema storage to anon, authenticated, service_role;
+grant all on storage.buckets, storage.objects to anon, authenticated, service_role;

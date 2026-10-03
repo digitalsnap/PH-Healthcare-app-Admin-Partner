@@ -21,8 +21,7 @@ const capacity = z.coerce.number(err("required")).int(err("required")).min(1, er
 // Availability rules
 // ---------------------------------------------------------------------------
 
-export const RULE_FIELDS = [
-  "facility_id",
+const RULE_VALUE_FIELDS = [
   "weekday",
   "start_time",
   "end_time",
@@ -32,8 +31,11 @@ export const RULE_FIELDS = [
   "valid_to",
 ] as const;
 
-const ruleSchema = z.object({
-  facility_id: uuid,
+/** A doctor's rule names the clinic; a facility's rule names the resource schedule. */
+export const RULE_FIELDS = ["facility_id", ...RULE_VALUE_FIELDS] as const;
+export const RESOURCE_RULE_FIELDS = ["schedule_id", ...RULE_VALUE_FIELDS] as const;
+
+const ruleValues = {
   weekday: z.coerce.number(err("invalidChoice")).int().min(1, err("invalidChoice")).max(7, err("invalidChoice")),
   start_time: time,
   end_time: time,
@@ -41,29 +43,50 @@ const ruleSchema = z.object({
   capacity_per_slot: capacity,
   valid_from: z.string(err("invalidDate")).pipe(isoDate),
   valid_to: isoDate.optional(),
-});
+};
+
+const ruleSchema = z.object({ facility_id: uuid, ...ruleValues });
+const resourceRuleSchema = z.object({ schedule_id: uuid, ...ruleValues });
 
 export type RuleFormInput = z.infer<typeof ruleSchema>;
+export type ResourceRuleFormInput = z.infer<typeof resourceRuleSchema>;
 
-export function parseRuleForm(formData: FormData): Parsed<RuleFormInput> {
-  const parsed = parseWith(ruleSchema, fields(formData, RULE_FIELDS));
-  if (!parsed.ok) return parsed;
-  const rule = parsed.data;
-  if (rule.end_time <= rule.start_time) return fail("timesOrder");
-  if (rule.valid_to !== undefined && rule.valid_to < rule.valid_from) return fail("datesOrder");
+/** The checks a rule must pass beyond each field being well-formed. */
+function ruleProblem(
+  rule: Omit<RuleFormInput, "facility_id">,
+): "timesOrder" | "datesOrder" | "invalidSlotLength" | null {
+  if (rule.end_time <= rule.start_time) return "timesOrder";
+  if (rule.valid_to !== undefined && rule.valid_to < rule.valid_from) return "datesOrder";
 
   // The session must hold at least one whole slot.
   const [startHour, startMinute] = rule.start_time.split(":").map(Number);
   const [endHour, endMinute] = rule.end_time.split(":").map(Number);
   const sessionMinutes = endHour * 60 + endMinute - (startHour * 60 + startMinute);
-  if (rule.slot_minutes > sessionMinutes) return fail("invalidSlotLength");
-  return parsed;
+  if (rule.slot_minutes > sessionMinutes) return "invalidSlotLength";
+  return null;
+}
+
+export function parseRuleForm(formData: FormData): Parsed<RuleFormInput> {
+  const parsed = parseWith(ruleSchema, fields(formData, RULE_FIELDS));
+  if (!parsed.ok) return parsed;
+  const problem = ruleProblem(parsed.data);
+  return problem ? fail(problem) : parsed;
+}
+
+export function parseResourceRuleForm(formData: FormData): Parsed<ResourceRuleFormInput> {
+  const parsed = parseWith(resourceRuleSchema, fields(formData, RESOURCE_RULE_FIELDS));
+  if (!parsed.ok) return parsed;
+  const problem = ruleProblem(parsed.data);
+  return problem ? fail(problem) : parsed;
 }
 
 /** The same rule fields arriving as a preview query string. */
-export function ruleFormFromQuery(query: Record<string, string | string[] | undefined>): FormData {
+export function ruleFormFromQuery(
+  query: Record<string, string | string[] | undefined>,
+  keys: readonly string[] = RULE_FIELDS,
+): FormData {
   const formData = new FormData();
-  for (const key of RULE_FIELDS) {
+  for (const key of keys) {
     const value = query[key];
     const first = Array.isArray(value) ? value[0] : value;
     if (first !== undefined) formData.set(key, first);
@@ -190,6 +213,10 @@ export type WalkInInput = {
   patient_id: string | null;
   full_name: string | null;
   phone: string | null;
+  home_service: boolean;
+  home_address: string | null;
+  home_barangay_code: string | null;
+  home_landmark: string | null;
 };
 
 export function parseWalkInForm(formData: FormData): Parsed<WalkInInput> {
@@ -203,12 +230,27 @@ export function parseWalkInForm(formData: FormData): Parsed<WalkInInput> {
       patient_id: uuid.optional(),
       full_name: z.string().max(200, err("nameRequired")).optional(),
       phone: phMobile.optional(),
+      home_address: z.string().max(300, err("homeAddressRequired")).optional(),
+      home_barangay_code: z.string().regex(/^[0-9]{10}$/, err("invalidChoice")).optional(),
+      home_landmark: z.string().max(200, err("generic")).optional(),
     }),
-    fields(formData, ["slot_id", "service_id", "patient_id", "full_name", "phone"]),
+    fields(formData, [
+      "slot_id",
+      "service_id",
+      "patient_id",
+      "full_name",
+      "phone",
+      "home_address",
+      "home_barangay_code",
+      "home_landmark",
+    ]),
   );
   if (!parsed.ok) return parsed;
   const data = parsed.data;
   if (data.patient_id === undefined && data.full_name === undefined) return fail("patientRequired");
+  // A home-service visit needs somewhere to go.
+  const homeService = formData.get("home_service") === "on";
+  if (homeService && data.home_address === undefined) return fail("homeAddressRequired");
   return {
     ok: true,
     data: {
@@ -218,6 +260,10 @@ export function parseWalkInForm(formData: FormData): Parsed<WalkInInput> {
       // A returning patient's details are not overwritten from this form.
       full_name: data.patient_id ? null : (data.full_name ?? null),
       phone: data.patient_id ? null : (data.phone ?? null),
+      home_service: homeService,
+      home_address: homeService ? (data.home_address ?? null) : null,
+      home_barangay_code: homeService ? (data.home_barangay_code ?? null) : null,
+      home_landmark: homeService ? (data.home_landmark ?? null) : null,
     },
   };
 }

@@ -79,3 +79,70 @@ export async function updateCoverageProgram(
   revalidatePath("/admin", "layout");
   redirect("/admin/coverage");
 }
+
+export async function createOrganization(_previous: FormState, formData: FormData): Promise<FormState> {
+  const { supabase, actorId } = await adminContext();
+  const name = String(formData.get("name") ?? "").trim();
+  if (name === "" || name.length > 200) return failed("nameRequired");
+
+  const { data, error } = await supabase.from("organization").insert({ name }).select("id").single();
+  if (error || !data) return failed("generic");
+
+  await logAccess(supabase, actorId, {
+    action: "organization.create",
+    resourceType: "organization",
+    resourceId: data.id,
+  });
+  revalidatePath("/admin", "layout");
+  return SAVED;
+}
+
+/**
+ * Assigns a provider-staff account to an organization. They can then manage
+ * every facility under it in the provider portal.
+ */
+export async function addOrganizationStaff(_previous: FormState, formData: FormData): Promise<FormState> {
+  const { supabase, actorId } = await adminContext();
+  const organizationId = idSchema.safeParse(formData.get("organization_id"));
+  const accountId = idSchema.safeParse(formData.get("app_user_id"));
+  if (!organizationId.success || !accountId.success) return failed("invalidChoice");
+
+  const { data: account } = await supabase
+    .from("app_user")
+    .select("id")
+    .eq("id", accountId.data)
+    .eq("role", "provider_staff")
+    .maybeSingle();
+  if (!account) return failed("invalidChoice");
+
+  const { error } = await supabase
+    .from("organization_staff")
+    .insert({ organization_id: organizationId.data, app_user_id: accountId.data });
+  if (isUniqueViolation(error)) return failed("duplicate");
+  if (error) return failed("generic");
+
+  await logAccess(supabase, actorId, {
+    action: "organization_staff.add",
+    resourceType: "organization",
+    resourceId: organizationId.data,
+  });
+  revalidatePath("/admin", "layout");
+  return SAVED;
+}
+
+export async function removeOrganizationStaff(_previous: FormState, formData: FormData): Promise<FormState> {
+  const { supabase, actorId } = await adminContext();
+  const id = idSchema.safeParse(formData.get("id"));
+  if (!id.success) return failed("generic");
+
+  const { error } = await supabase.from("organization_staff").delete().eq("id", id.data);
+  if (error) return failed("generic");
+
+  await logAccess(supabase, actorId, {
+    action: "organization_staff.remove",
+    resourceType: "organization_staff",
+    resourceId: id.data,
+  });
+  revalidatePath("/admin", "layout");
+  return SAVED;
+}

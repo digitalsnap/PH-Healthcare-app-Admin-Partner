@@ -42,7 +42,8 @@
       "services": "Services",
       "coverage": "Coverage",
       "users": "Users",
-      "accessLog": "Access log"
+      "accessLog": "Access log",
+      "organizations": "Organizations"
     },
     "common": {
       "saving": "Saving…",
@@ -96,13 +97,23 @@
       "affiliationInUse": "This clinic has a schedule. Remove its sessions before removing the clinic.",
       "slotFull": "That slot is already full.",
       "slotUnavailable": "That slot is no longer available.",
-      "consentRequired": "Confirm the patient's consent before booking.",
+      "consentRequired": "Confirm the patient’s consent first.",
       "patientRequired": "Choose a returning patient or enter the patient's name.",
       "transitionNotAllowed": "This appointment can no longer be changed that way.",
       "noShowTooEarly": "A no-show can only be marked once the appointment time has started.",
       "rescheduleNotAllowed": "Only a booked appointment can move, and only to a future slot.",
       "reasonRequired": "Choose a reason for cancelling.",
-      "verificationRequested": "You cannot publish until your PRC verification is recorded. Our team has been notified of your request."
+      "verificationRequested": "You cannot publish until your PRC verification is recorded. Our team has been notified of your request.",
+      "homeAddressRequired": "Enter the home address for a home-service visit.",
+      "resourceNameRequired": "Enter a name for the resource.",
+      "invalidQuantity": "Enter a quantity from 1 to 1000.",
+      "fileRequired": "Choose a file to deliver.",
+      "fileTooLarge": "The file is too large.",
+      "fileTypeNotAllowed": "Only PDF, JPEG and PNG files can be delivered.",
+      "uploadFailed": "The file could not be delivered. Nothing was saved.",
+      "withdrawalNotAllowed": "This document cannot be changed that way.",
+      "fileRemovalFailed": "The withdrawal is approved and the patient can no longer see the document, but storage did not confirm the file was deleted. Retry from the queue; an admin can also close it by hand.",
+      "overrideNotConfirmed": "Tick the box to confirm you checked the file is gone."
     },
     "freshness": {
       "lastVerified": "Last verified {date}",
@@ -184,7 +195,29 @@
       "requestedOn": "Requested {date}",
       "approve": "Approve",
       "reject": "Reject",
-      "requestedVerification": "Asked to be verified · {date}"
+      "requestedVerification": "Asked to be verified · {date}",
+      "withdrawals": "Result withdrawal requests ({count})",
+      "withdrawalsHint": "A facility asked to withdraw a delivered result. Approving deletes the file for good.",
+      "withdrawalsEmpty": "No requests waiting.",
+      "approveWithdrawal": "Approve and delete file",
+      "rejectWithdrawal": "Reject",
+      "retryRemoval": "Try deleting the file again",
+      "documentTypes": {
+        "lab_result": "Lab result",
+        "imaging_result": "Imaging result",
+        "prescription": "Prescription",
+        "consult_summary": "Consult summary",
+        "other": "Document"
+      },
+      "withdrawalReasons": {
+        "wrong_patient": "Sent to the wrong patient",
+        "wrong_file": "Wrong file",
+        "duplicate": "Duplicate",
+        "other": "Other reason"
+      },
+      "removalPending": "Approved, but the stored file is not confirmed deleted yet. The patient cannot see it.",
+      "overrideRemoval": "Close without confirmation",
+      "overrideConfirm": "I have checked in storage that this file is gone (or removed it there myself). Record that I closed this by hand."
     },
     "facilities": {
       "title": "Facilities",
@@ -229,7 +262,9 @@
       "verification": "Verification",
       "verificationHint": "Mark as verified only after you have checked this listing's details with the facility.",
       "markVerified": "Mark verified today",
-      "setStatus": "Set status"
+      "setStatus": "Set status",
+      "organization": "Organization",
+      "organizationHint": "Staff assigned to this organization manage the facility in the provider portal."
     },
     "prices": {
       "title": "Services and prices",
@@ -348,6 +383,20 @@
       "unknownActor": "Unknown account",
       "system": "System",
       "patientRecord": "Concerns a patient record"
+    },
+    "organizations": {
+      "title": "Organizations",
+      "hint": "An organization owns one or more facilities. Provider staff assigned to it manage all of them.",
+      "empty": "No organizations yet.",
+      "facilities": "Facilities: {names}",
+      "noFacilities": "No facilities yet. Set the organization on a facility's edit page.",
+      "staff": "Provider staff",
+      "noStaff": "Nobody assigned yet.",
+      "addStaff": "Assign staff",
+      "account": "Account",
+      "accountHint": "Accounts with the provider staff role. Invite them under Users first.",
+      "add": "Add organization",
+      "name": "Name"
     }
   },
   "doctor": {
@@ -558,5 +607,236 @@
       "noSlots": "No slots",
       "book": "book"
     }
+  },
+  "provider": {
+    "segments": {
+      "clinic": "Clinic portal",
+      "diagnostics": "Diagnostics portal",
+      "pharmacy": "Pharmacy portal"
+    },
+    "common": {
+      "save": "Save",
+      "remove": "Remove",
+      "none": "—",
+      "choose": "Choose…"
+    },
+    "nav": {
+      "allFacilities": "All facilities",
+      "overview": "Overview",
+      "catalogue": "Services and prices",
+      "schedule": "Schedule",
+      "bookings": "Bookings",
+      "queue": "Queue",
+      "results": "Results",
+      "stock": "Stock",
+      "reservations": "Reservations",
+      "refills": "Refills",
+      "profile": "Profile",
+      "calendar": "Calendar"
+    },
+    "home": {
+      "title": "Your facilities",
+      "empty": "Your account is not assigned to an organization yet. Please ask our team to assign it.",
+      "noPortal": "No portal for this facility type yet"
+    },
+    "overview": {
+      "editProfile": "Edit profile",
+      "yakapOn": "YAKAP accredited",
+      "yakapOff": "No current YAKAP accreditation on record",
+      "gamotOn": "GAMOT accredited",
+      "gamotOff": "No current GAMOT accreditation on record",
+      "badgeHint": "Verification and accreditation are recorded by our team. Tell us if something here is out of date.",
+      "listing": "Listing status"
+    },
+    "profile": {
+      "title": "Profile",
+      "hint": "You can update contact details and hours. Name, location, licences and verification are kept by our team.",
+      "address": "Street address",
+      "phone": "Phone",
+      "hours": "Opening hours",
+      "hoursHint": "Leave a day empty when the facility is closed.",
+      "opens": "{day} opens",
+      "closes": "{day} closes"
+    },
+    "catalogue": {
+      "title": "Services and prices",
+      "prices": "Prices",
+      "noPrices": "No prices listed yet.",
+      "confirmedOn": "Confirmed by facility · {date}",
+      "addPrice": "Add price",
+      "addPriceHint": "Enter the lowest and highest a patient pays. The price is labelled as confirmed by you today.",
+      "noServices": "No matching services in the catalogue yet. Add one below.",
+      "service": "Service",
+      "min": "Lowest price (₱)",
+      "max": "Highest price (₱)",
+      "prep": "Preparation instructions",
+      "prepHint": "What a patient must do before the test, shown before they book.",
+      "noPrep": "No instructions yet.",
+      "locales": {
+        "en": "English",
+        "fil": "Filipino"
+      },
+      "fasting": "Fasting: {hours} hours",
+      "savePrep": "Save instructions",
+      "language": "Language",
+      "instructions": "Instructions",
+      "fastingHours": "Fasting hours",
+      "fastingHoursHint": "Leave empty if no fasting is needed.",
+      "addService": "Add a service to the catalogue",
+      "addServiceHint": "Only if the service is not in the list yet. Check the spelling: the catalogue is shared.",
+      "serviceType": "Type",
+      "serviceName": "Name"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "noResources": "Add a resource first: a room, a machine, a counter or a home-service team.",
+      "addResource": "Add resource",
+      "addResourceHint": "Each resource has its own sessions and its own slots.",
+      "resourceName": "Resource name",
+      "resource": "Resource",
+      "previewTitle": "Preview: the next {days} days for this resource"
+    },
+    "bookings": {
+      "title": "Bookings",
+      "new": "Book for a patient",
+      "book": "Book appointment",
+      "noSlots": "No open slots in the next 14 days. Publish a schedule first.",
+      "slot": "Slot",
+      "seatsLeft": "{count, plural, one {# seat left} other {# seats left}}",
+      "service": "Service",
+      "homeService": "Home service",
+      "homeServiceCheck": "This is a home-service visit",
+      "homeAddress": "Home address",
+      "homeAddressHint": "Needed for a home-service visit.",
+      "homeBarangay": "Barangay",
+      "homeLandmark": "Landmark or directions",
+      "resource": "Resource",
+      "doctorSchedule": "A doctor's schedule"
+    },
+    "counter": {
+      "returningPatient": "Returning patient",
+      "returningPatientHint": "Choose a patient you have served before, or leave as new and enter a name.",
+      "newPatient": "New patient",
+      "patientName": "Patient's full name",
+      "patientPhone": "Mobile number",
+      "patientPhoneHint": "Optional. Used only to text the patient about this.",
+      "consent": "The patient agreed at the counter to this and to being contacted about it."
+    },
+    "queue": {
+      "title": "Today's queue",
+      "addWalkIn": "Add walk-in",
+      "beingSeen": "Being seen",
+      "waiting": "Waiting",
+      "expected": "Not arrived yet",
+      "done": "Done",
+      "none": "Nobody."
+    },
+    "results": {
+      "title": "Results",
+      "deliver": "Deliver a result",
+      "deliverHint": "The file goes to the patient's health vault. We store and deliver it; we do not read it.",
+      "noVisits": "No visits in the last 30 days to deliver a result for.",
+      "visit": "Visit",
+      "choose": "Choose…",
+      "type": "Document type",
+      "types": {
+        "lab_result": "Lab result",
+        "imaging_result": "Imaging result"
+      },
+      "file": "File",
+      "fileHint": "PDF, JPEG or PNG, up to {megabytes} MB.",
+      "delivered": "Delivered",
+      "noneDelivered": "Nothing delivered yet.",
+      "releasedOn": "Delivered {date}",
+      "open": "Open file",
+      "withdrawal": {
+        "request": "Request withdrawal",
+        "reason": "Why should this be withdrawn?",
+        "hint": "The patient stops seeing it at once. Our team then confirms and deletes the file.",
+        "statuses": {
+          "requested": "Withdrawal requested · hidden from the patient",
+          "approved": "Withdrawn · file deleted",
+          "rejected": "Withdrawal not approved · visible to the patient"
+        },
+        "reasons": {
+          "wrong_patient": "Sent to the wrong patient",
+          "wrong_file": "Wrong file",
+          "duplicate": "Duplicate",
+          "other": "Other"
+        }
+      }
+    },
+    "stock": {
+      "title": "Stock",
+      "gamotOn": "GAMOT accredited",
+      "gamotOff": "No current GAMOT accreditation on record",
+      "hint": "Confirm each medicine once a day so patients know before they travel.",
+      "noMedicines": "No medicines in the catalogue yet. Add them under Services and prices.",
+      "neverReported": "Not reported yet",
+      "inStockAsOf": "In stock · confirmed {date}",
+      "outOfStockAsOf": "Out of stock · confirmed {date}",
+      "today": "today",
+      "confirmInStock": "In stock: confirm today",
+      "confirmOutOfStock": "Out of stock"
+    },
+    "reservations": {
+      "title": "Reservations",
+      "hint": "A reservation is a hold for pickup. The patient brings their prescription when they collect.",
+      "empty": "No reservations yet.",
+      "new": "Reserve for a patient",
+      "noMedicines": "No medicines in the catalogue yet. Add them under Services and prices.",
+      "medicine": "Medicine",
+      "quantity": "Quantity",
+      "holdFor": "Hold for",
+      "holdDays": "{count, plural, one {# day} other {# days}}",
+      "holdUntil": "Held until {date}",
+      "statuses": {
+        "reserved": "Reserved",
+        "ready": "Ready for pickup",
+        "picked_up": "Picked up",
+        "cancelled": "Cancelled",
+        "expired": "Expired"
+      },
+      "actions": {
+        "ready": "Mark ready",
+        "picked_up": "Mark picked up",
+        "cancelled": "Cancel"
+      }
+    },
+    "refills": {
+      "title": "Refill requests",
+      "hint": "Requests to prepare a refill of a maintenance medicine. The patient brings their prescription when they collect.",
+      "empty": "No refill requests yet.",
+      "new": "Add a refill request",
+      "noMedicines": "No medicines in the catalogue yet. Add them under Services and prices.",
+      "medicine": "Medicine",
+      "neededByLabel": "Needed by",
+      "neededBy": "Needed by {date}",
+      "statuses": {
+        "requested": "Requested",
+        "accepted": "Accepted",
+        "ready": "Ready for pickup",
+        "picked_up": "Picked up",
+        "declined": "Declined",
+        "cancelled": "Cancelled"
+      },
+      "actions": {
+        "accepted": "Accept",
+        "declined": "Decline",
+        "ready": "Mark ready",
+        "picked_up": "Mark picked up",
+        "cancelled": "Cancel"
+      }
+    }
+  },
+  "sms": {
+    "booking_confirmed": "Booking confirmed: {when}, {place}. Code: {code}. Bring a valid ID.",
+    "booking_rescheduled": "Your booking was moved to {when}, {place}. Code: {code}.",
+    "booking_cancelled": "Your booking {code} at {place} was cancelled. You may book again anytime.",
+    "appointment_reminder": "Reminder: your appointment is on {when}, {place}. Code: {code}.",
+    "reservation_ready": "Your medicine reservation {code} is ready for pickup at {place}. Bring your prescription.",
+    "reservation_cancelled": "Your medicine reservation {code} at {place} was cancelled.",
+    "refill_ready": "Your refill is ready for pickup at {place}. Bring your prescription.",
+    "refill_declined": "{place} could not prepare your refill request. Please contact the pharmacy."
   }
 }

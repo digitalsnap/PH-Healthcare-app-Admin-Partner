@@ -42,7 +42,8 @@
       "services": "Mga serbisyo",
       "coverage": "Coverage",
       "users": "Mga user",
-      "accessLog": "Access log"
+      "accessLog": "Access log",
+      "organizations": "Mga organisasyon"
     },
     "common": {
       "saving": "Sine-save…",
@@ -96,13 +97,23 @@
       "affiliationInUse": "May iskedyul ang klinikang ito. Alisin muna ang mga sesyon nito bago alisin ang klinika.",
       "slotFull": "Puno na ang slot na iyon.",
       "slotUnavailable": "Hindi na available ang slot na iyon.",
-      "consentRequired": "Kumpirmahin muna ang pagpayag ng pasyente bago mag-book.",
+      "consentRequired": "Kumpirmahin muna ang pagpayag ng pasyente.",
       "patientRequired": "Pumili ng dating pasyente o ilagay ang pangalan ng pasyente.",
       "transitionNotAllowed": "Hindi na mababago nang ganoon ang appointment na ito.",
       "noShowTooEarly": "Maaari lamang markahang hindi dumating kapag nagsimula na ang oras ng appointment.",
       "rescheduleNotAllowed": "Naka-book na appointment lamang ang maililipat, at sa paparating na slot lamang.",
       "reasonRequired": "Pumili ng dahilan ng pagkansela.",
-      "verificationRequested": "Hindi ka makakapag-publish hangga't hindi naitatala ang iyong beripikasyon sa PRC. Naabisuhan na ang aming team sa iyong hiling."
+      "verificationRequested": "Hindi ka makakapag-publish hangga't hindi naitatala ang iyong beripikasyon sa PRC. Naabisuhan na ang aming team sa iyong hiling.",
+      "homeAddressRequired": "Ilagay ang address ng bahay para sa home-service na pagbisita.",
+      "resourceNameRequired": "Maglagay ng pangalan para sa resource.",
+      "invalidQuantity": "Maglagay ng dami mula 1 hanggang 1000.",
+      "fileRequired": "Pumili ng file na ihahatid.",
+      "fileTooLarge": "Masyadong malaki ang file.",
+      "fileTypeNotAllowed": "PDF, JPEG at PNG lamang ang maihahatid.",
+      "uploadFailed": "Hindi naihatid ang file. Walang na-save.",
+      "withdrawalNotAllowed": "Hindi mababago nang ganoon ang dokumentong ito.",
+      "fileRemovalFailed": "Aprubado na ang pagbawi at hindi na ito nakikita ng pasyente, pero hindi nakumpirma ng storage na nabura ang file. Subukang muli mula sa pila; maaari din itong isara nang mano-mano ng admin.",
+      "overrideNotConfirmed": "Lagyan ng tsek ang kahon para kumpirmahing nasuri mong wala na ang file."
     },
     "freshness": {
       "lastVerified": "Huling na-verify {date}",
@@ -184,7 +195,29 @@
       "requestedOn": "Hiniling noong {date}",
       "approve": "Aprubahan",
       "reject": "Tanggihan",
-      "requestedVerification": "Humiling na ma-verify · {date}"
+      "requestedVerification": "Humiling na ma-verify · {date}",
+      "withdrawals": "Mga hiling na bawiin ang resulta ({count})",
+      "withdrawalsHint": "May pasilidad na humiling na bawiin ang naihatid na resulta. Permanenteng mabubura ang file kapag inaprubahan.",
+      "withdrawalsEmpty": "Walang naghihintay na hiling.",
+      "approveWithdrawal": "Aprubahan at burahin ang file",
+      "rejectWithdrawal": "Tanggihan",
+      "retryRemoval": "Subukang burahin muli ang file",
+      "documentTypes": {
+        "lab_result": "Resulta ng lab",
+        "imaging_result": "Resulta ng imaging",
+        "prescription": "Reseta",
+        "consult_summary": "Buod ng konsulta",
+        "other": "Dokumento"
+      },
+      "withdrawalReasons": {
+        "wrong_patient": "Naipadala sa maling pasyente",
+        "wrong_file": "Maling file",
+        "duplicate": "Doble",
+        "other": "Ibang dahilan"
+      },
+      "removalPending": "Aprubado, pero hindi pa kumpirmadong nabura ang file. Hindi ito nakikita ng pasyente.",
+      "overrideRemoval": "Isara nang walang kumpirmasyon",
+      "overrideConfirm": "Nasuri ko sa storage na wala na ang file na ito (o ako mismo ang nag-alis doon). Itala na mano-mano ko itong isinara."
     },
     "facilities": {
       "title": "Mga pasilidad",
@@ -229,7 +262,9 @@
       "verification": "Beripikasyon",
       "verificationHint": "Markahang na-verify lamang pagkatapos mong masuri sa pasilidad ang mga detalye ng listing na ito.",
       "markVerified": "Markahang na-verify ngayon",
-      "setStatus": "Itakda ang status"
+      "setStatus": "Itakda ang status",
+      "organization": "Organisasyon",
+      "organizationHint": "Ang staff na nakatalaga sa organisasyong ito ang mamamahala sa pasilidad sa provider portal."
     },
     "prices": {
       "title": "Mga serbisyo at presyo",
@@ -348,6 +383,20 @@
       "unknownActor": "Hindi kilalang account",
       "system": "System",
       "patientRecord": "Tungkol sa rekord ng pasyente"
+    },
+    "organizations": {
+      "title": "Mga organisasyon",
+      "hint": "May isa o higit pang pasilidad ang isang organisasyon. Pinamamahalaan ng nakatalagang provider staff ang lahat ng ito.",
+      "empty": "Wala pang organisasyon.",
+      "facilities": "Mga pasilidad: {names}",
+      "noFacilities": "Wala pang pasilidad. Itakda ang organisasyon sa edit page ng pasilidad.",
+      "staff": "Provider staff",
+      "noStaff": "Wala pang nakatalaga.",
+      "addStaff": "Magtalaga ng staff",
+      "account": "Account",
+      "accountHint": "Mga account na may role na provider staff. Imbitahan muna sila sa Mga user.",
+      "add": "Magdagdag ng organisasyon",
+      "name": "Pangalan"
     }
   },
   "doctor": {
@@ -558,5 +607,236 @@
       "noSlots": "Walang slot",
       "book": "mag-book"
     }
+  },
+  "provider": {
+    "segments": {
+      "clinic": "Portal ng klinika",
+      "diagnostics": "Portal ng diagnostics",
+      "pharmacy": "Portal ng botika"
+    },
+    "common": {
+      "save": "I-save",
+      "remove": "Alisin",
+      "none": "—",
+      "choose": "Pumili…"
+    },
+    "nav": {
+      "allFacilities": "Lahat ng pasilidad",
+      "overview": "Buod",
+      "catalogue": "Mga serbisyo at presyo",
+      "schedule": "Iskedyul",
+      "bookings": "Mga booking",
+      "queue": "Pila",
+      "results": "Mga resulta",
+      "stock": "Stock",
+      "reservations": "Mga reserbasyon",
+      "refills": "Mga refill",
+      "profile": "Profile",
+      "calendar": "Kalendaryo"
+    },
+    "home": {
+      "title": "Mga pasilidad mo",
+      "empty": "Hindi pa naitatalaga ang account mo sa isang organisasyon. Pakisabihan ang aming team para italaga ito.",
+      "noPortal": "Wala pang portal para sa uri ng pasilidad na ito"
+    },
+    "overview": {
+      "editProfile": "I-edit ang profile",
+      "yakapOn": "May akreditasyon sa YAKAP",
+      "yakapOff": "Walang nakatalang kasalukuyang akreditasyon sa YAKAP",
+      "gamotOn": "May akreditasyon sa GAMOT",
+      "gamotOff": "Walang nakatalang kasalukuyang akreditasyon sa GAMOT",
+      "badgeHint": "Ang aming team ang nagtatala ng beripikasyon at akreditasyon. Sabihan kami kung may luma na rito.",
+      "listing": "Status ng listing"
+    },
+    "profile": {
+      "title": "Profile",
+      "hint": "Maaari mong i-update ang contact at oras. Ang aming team ang humahawak ng pangalan, lokasyon, lisensya at beripikasyon.",
+      "address": "Address",
+      "phone": "Telepono",
+      "hours": "Oras ng bukas",
+      "hoursHint": "Iwanang blangko ang araw kapag sarado ang pasilidad.",
+      "opens": "Bukas sa {day}",
+      "closes": "Sara sa {day}"
+    },
+    "catalogue": {
+      "title": "Mga serbisyo at presyo",
+      "prices": "Mga presyo",
+      "noPrices": "Wala pang nakalistang presyo.",
+      "confirmedOn": "Kinumpirma ng pasilidad · {date}",
+      "addPrice": "Magdagdag ng presyo",
+      "addPriceHint": "Ilagay ang pinakamababa at pinakamataas na binabayaran ng pasyente. Mamarkahan itong kinumpirma mo ngayong araw.",
+      "noServices": "Wala pang tugmang serbisyo sa katalogo. Magdagdag sa ibaba.",
+      "service": "Serbisyo",
+      "min": "Pinakamababang presyo (₱)",
+      "max": "Pinakamataas na presyo (₱)",
+      "prep": "Mga paghahanda",
+      "prepHint": "Ang dapat gawin ng pasyente bago ang test, ipinapakita bago sila mag-book.",
+      "noPrep": "Wala pang tagubilin.",
+      "locales": {
+        "en": "Ingles",
+        "fil": "Filipino"
+      },
+      "fasting": "Pag-aayuno: {hours} oras",
+      "savePrep": "I-save ang tagubilin",
+      "language": "Wika",
+      "instructions": "Mga tagubilin",
+      "fastingHours": "Oras ng pag-aayuno",
+      "fastingHoursHint": "Iwanang blangko kung hindi kailangang mag-ayuno.",
+      "addService": "Magdagdag ng serbisyo sa katalogo",
+      "addServiceHint": "Kung wala pa lamang sa listahan ang serbisyo. Suriin ang baybay: pinagsasaluhan ang katalogo.",
+      "serviceType": "Uri",
+      "serviceName": "Pangalan"
+    },
+    "schedule": {
+      "title": "Iskedyul",
+      "noResources": "Magdagdag muna ng resource: kuwarto, makina, counter o home-service team.",
+      "addResource": "Magdagdag ng resource",
+      "addResourceHint": "May sariling sesyon at sariling slot ang bawat resource.",
+      "resourceName": "Pangalan ng resource",
+      "resource": "Resource",
+      "previewTitle": "Preview: susunod na {days} araw para sa resource na ito"
+    },
+    "bookings": {
+      "title": "Mga booking",
+      "new": "Mag-book para sa pasyente",
+      "book": "I-book ang appointment",
+      "noSlots": "Walang bakanteng slot sa susunod na 14 na araw. Mag-publish muna ng iskedyul.",
+      "slot": "Slot",
+      "seatsLeft": "{count, plural, one {# bakante} other {# bakante}}",
+      "service": "Serbisyo",
+      "homeService": "Home service",
+      "homeServiceCheck": "Home-service na pagbisita ito",
+      "homeAddress": "Address ng bahay",
+      "homeAddressHint": "Kailangan para sa home-service na pagbisita.",
+      "homeBarangay": "Barangay",
+      "homeLandmark": "Palatandaan o direksyon",
+      "resource": "Resource",
+      "doctorSchedule": "Iskedyul ng doktor"
+    },
+    "counter": {
+      "returningPatient": "Dating pasyente",
+      "returningPatientHint": "Pumili ng pasyenteng napagsilbihan na, o iwanang bago at maglagay ng pangalan.",
+      "newPatient": "Bagong pasyente",
+      "patientName": "Buong pangalan ng pasyente",
+      "patientPhone": "Numero ng mobile",
+      "patientPhoneHint": "Opsyonal. Gagamitin lamang para i-text ang pasyente tungkol dito.",
+      "consent": "Pumayag ang pasyente sa counter dito at sa pakikipag-ugnayan sa kanya tungkol dito."
+    },
+    "queue": {
+      "title": "Pila ngayong araw",
+      "addWalkIn": "Magdagdag ng walk-in",
+      "beingSeen": "Kinokonsulta",
+      "waiting": "Naghihintay",
+      "expected": "Hindi pa dumarating",
+      "done": "Tapos na",
+      "none": "Wala."
+    },
+    "results": {
+      "title": "Mga resulta",
+      "deliver": "Maghatid ng resulta",
+      "deliverHint": "Mapupunta ang file sa health vault ng pasyente. Iniimbak at inihahatid namin ito; hindi namin ito binabasa.",
+      "noVisits": "Walang pagbisita sa huling 30 araw na mahahatiran ng resulta.",
+      "visit": "Pagbisita",
+      "choose": "Pumili…",
+      "type": "Uri ng dokumento",
+      "types": {
+        "lab_result": "Resulta ng lab",
+        "imaging_result": "Resulta ng imaging"
+      },
+      "file": "File",
+      "fileHint": "PDF, JPEG o PNG, hanggang {megabytes} MB.",
+      "delivered": "Naihatid",
+      "noneDelivered": "Wala pang naihahatid.",
+      "releasedOn": "Naihatid noong {date}",
+      "open": "Buksan ang file",
+      "withdrawal": {
+        "request": "Hilinging bawiin",
+        "reason": "Bakit ito dapat bawiin?",
+        "hint": "Agad itong hindi na makikita ng pasyente. Kukumpirmahin ng aming team at buburahin ang file.",
+        "statuses": {
+          "requested": "Hiniling na bawiin · nakatago sa pasyente",
+          "approved": "Binawi na · nabura ang file",
+          "rejected": "Hindi inaprubahan ang pagbawi · nakikita ng pasyente"
+        },
+        "reasons": {
+          "wrong_patient": "Naipadala sa maling pasyente",
+          "wrong_file": "Maling file",
+          "duplicate": "Doble",
+          "other": "Iba pa"
+        }
+      }
+    },
+    "stock": {
+      "title": "Stock",
+      "gamotOn": "May akreditasyon sa GAMOT",
+      "gamotOff": "Walang nakatalang kasalukuyang akreditasyon sa GAMOT",
+      "hint": "Kumpirmahin ang bawat gamot minsan sa isang araw para alam ng pasyente bago bumiyahe.",
+      "noMedicines": "Wala pang gamot sa katalogo. Idagdag sa Mga serbisyo at presyo.",
+      "neverReported": "Hindi pa naiuulat",
+      "inStockAsOf": "May stock · kinumpirma {date}",
+      "outOfStockAsOf": "Walang stock · kinumpirma {date}",
+      "today": "ngayong araw",
+      "confirmInStock": "May stock: kumpirmahin ngayon",
+      "confirmOutOfStock": "Walang stock"
+    },
+    "reservations": {
+      "title": "Mga reserbasyon",
+      "hint": "Ang reserbasyon ay pagtatabi para sa pickup. Dadalhin ng pasyente ang reseta kapag kukunin.",
+      "empty": "Wala pang reserbasyon.",
+      "new": "Magreserba para sa pasyente",
+      "noMedicines": "Wala pang gamot sa katalogo. Idagdag sa Mga serbisyo at presyo.",
+      "medicine": "Gamot",
+      "quantity": "Dami",
+      "holdFor": "Itatabi nang",
+      "holdDays": "{count, plural, one {# araw} other {# araw}}",
+      "holdUntil": "Nakatabi hanggang {date}",
+      "statuses": {
+        "reserved": "Nakareserba",
+        "ready": "Handa nang kunin",
+        "picked_up": "Nakuha na",
+        "cancelled": "Kinansela",
+        "expired": "Nag-expire"
+      },
+      "actions": {
+        "ready": "Markahang handa",
+        "picked_up": "Markahang nakuha",
+        "cancelled": "Kanselahin"
+      }
+    },
+    "refills": {
+      "title": "Mga hiling na refill",
+      "hint": "Mga hiling na ihanda ang refill ng maintenance na gamot. Dadalhin ng pasyente ang reseta kapag kukunin.",
+      "empty": "Wala pang hiling na refill.",
+      "new": "Magdagdag ng hiling na refill",
+      "noMedicines": "Wala pang gamot sa katalogo. Idagdag sa Mga serbisyo at presyo.",
+      "medicine": "Gamot",
+      "neededByLabel": "Kailangan bago ang",
+      "neededBy": "Kailangan bago ang {date}",
+      "statuses": {
+        "requested": "Hiniling",
+        "accepted": "Tinanggap",
+        "ready": "Handa nang kunin",
+        "picked_up": "Nakuha na",
+        "declined": "Tinanggihan",
+        "cancelled": "Kinansela"
+      },
+      "actions": {
+        "accepted": "Tanggapin",
+        "declined": "Tanggihan",
+        "ready": "Markahang handa",
+        "picked_up": "Markahang nakuha",
+        "cancelled": "Kanselahin"
+      }
+    }
+  },
+  "sms": {
+    "booking_confirmed": "Kumpirmado ang booking: {when}, {place}. Code: {code}. Magdala ng valid ID.",
+    "booking_rescheduled": "Inilipat ang booking mo sa {when}, {place}. Code: {code}.",
+    "booking_cancelled": "Kinansela ang booking mo {code} sa {place}. Maaari kang mag-book muli.",
+    "appointment_reminder": "Paalala: ang appointment mo ay sa {when}, {place}. Code: {code}.",
+    "reservation_ready": "Handa nang kunin ang nireserba mong gamot {code} sa {place}. Dalhin ang reseta.",
+    "reservation_cancelled": "Kinansela ang reserbasyon mo ng gamot {code} sa {place}.",
+    "refill_ready": "Handa nang kunin ang refill mo sa {place}. Dalhin ang reseta.",
+    "refill_declined": "Hindi naihanda ng {place} ang hiling mong refill. Pakitawagan ang botika."
   }
 }

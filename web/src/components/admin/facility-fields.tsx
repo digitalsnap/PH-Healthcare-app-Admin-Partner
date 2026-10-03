@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { FACILITY_TYPES, LICENCE_KINDS, LICENCE_ROWS, WEEKDAYS } from "@/lib/admin/schemas";
-import type { FacilityRow, LocationOption } from "@/lib/admin/types";
+import type { FacilityRow, LocationOption, OrganizationOption } from "@/lib/admin/types";
 import { Field, Input, Section, Select } from "./fields";
 
 /** The fields shared by "new facility" and "edit facility". */
@@ -8,11 +8,14 @@ export async function FacilityFields({
   facility,
   municipalities,
   barangays,
+  organizations,
 }: {
   facility?: FacilityRow;
   municipalities: LocationOption[];
   /** Barangays of the facility's municipality; only known once it is saved. */
   barangays?: LocationOption[];
+  /** The organization that owns the facility; its staff manage it in the provider portal. */
+  organizations: OrganizationOption[];
 }) {
   const t = await getTranslations("admin");
   const licences = facility?.licences ?? [];
@@ -60,6 +63,16 @@ export async function FacilityFields({
       ) : (
         <p className="text-sm text-zinc-600">{t("facilities.barangayAfterSave")}</p>
       )}
+      <Field label={t("facilities.organization")} hint={t("facilities.organizationHint")}>
+        <Select name="parent_org_id" defaultValue={facility?.parent_org_id ?? ""}>
+          <option value="">{t("common.none")}</option>
+          {organizations.map((organization) => (
+            <option key={organization.id} value={organization.id}>
+              {organization.name}
+            </option>
+          ))}
+        </Select>
+      </Field>
       <Field label={t("facilities.address")}>
         <Input name="address_line" maxLength={300} defaultValue={facility?.address_line ?? ""} />
       </Field>

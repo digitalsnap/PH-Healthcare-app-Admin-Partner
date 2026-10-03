@@ -43,6 +43,16 @@ export const FORM_ERRORS = [
   "rescheduleNotAllowed",
   "reasonRequired",
   "verificationRequested",
+  "homeAddressRequired",
+  "resourceNameRequired",
+  "invalidQuantity",
+  "fileRequired",
+  "fileTooLarge",
+  "fileTypeNotAllowed",
+  "uploadFailed",
+  "withdrawalNotAllowed",
+  "fileRemovalFailed",
+  "overrideNotConfirmed",
 ] as const;
 
 export type FormError = (typeof FORM_ERRORS)[number];

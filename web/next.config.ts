@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
       "next-intl/config": "./src/i18n/request.ts",
     },
   },
+  experimental: {
+    serverActions: {
+      // Result files delivered to the vault are capped at 8 MB (see
+      // RESULT_MAX_BYTES); the default 1 MB would reject them before our own
+      // validation runs.
+      bodySizeLimit: "10mb",
+    },
+  },
 };
 
 export default nextConfig;
